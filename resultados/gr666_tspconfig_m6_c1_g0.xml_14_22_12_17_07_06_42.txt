@@ -1,0 +1,17 @@
+Instância;./files/gr666.xml
+Execução;15 / 25
+Tamanho da Populaçap;200
+Máximo de gerações;300
+Mutação;6
+Cruzamento;1
+% Manpulação;30
+% Mutação;2
+Print Parcial;1
+Ativa Recursivo;0
+Percentual de Redução;78
+Profundidade Máxima;100
+Percentual de Eltismo;70
+Seleção para Cruzamento;0
+Forma de Seleção par Mutação;1
+
+Geração 1 / 300:;Profundidade;0;Melhor;400320.000000;Pior;4972083.000000;Media;4401591.215000;Tempo;4807.000000
