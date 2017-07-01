@@ -1,0 +1,146 @@
+Instância;files/gr96.xml
+Execução;1 / 1
+Tamanho da Populaçap;200
+Máximo de gerações;300
+Mutação;0
+Cruzamento;2
+% Manpulação;30
+% Mutação;20
+Print Parcial;1
+Ativa Recursivo;1
+Percentual de Redução;78
+Profundidade Máxima;10
+Percentual de Eltismo;70
+Seleção para Cruzamento (Roleta);0
+Forma de Seleção par Mutação;0
+
+Geração 1 / 300:;Profundidade;0;Melhor;291187.000000;Pior;383658.000000;Media;329709.910000;Tempo;0.000000
+;Profundidade;1;Melhor;197185.000000;Pior;280480.000000;Media;247629.281250;Tempo;0.000000
+;Profundidade;1;Melhor;197185.000000;Pior;278688.000000;Media;241533.148438;Tempo;0.000000
+Melhorou profundidade ;1
+Geração 2 / 300:;Profundidade;0;Melhor;288192.000000;Pior;389617.000000;Media;325054.750000;Tempo;0.000000
+;Profundidade;1;Melhor;224199.000000;Pior;311299.000000;Media;277959.662162;Tempo;0.000000
+Geração 3 / 300:;Profundidade;0;Melhor;288192.000000;Pior;366050.000000;Media;320455.465000;Tempo;0.000000
+;Profundidade;1;Melhor;223150.000000;Pior;320960.000000;Media;277479.212329;Tempo;1.000000
+Geração 4 / 300:;Profundidade;0;Melhor;286392.000000;Pior;366344.000000;Media;317075.270000;Tempo;1.000000
+;Profundidade;1;Melhor;200310.000000;Pior;258736.000000;Media;238711.400000;Tempo;1.000000
+Geração 5 / 300:;Profundidade;0;Melhor;284190.000000;Pior;360672.000000;Media;313984.400000;Tempo;1.000000
+Geração 6 / 300:;Profundidade;0;Melhor;279668.000000;Pior;351948.000000;Media;310368.735000;Tempo;1.000000
+;Profundidade;3;Melhor;77243.000000;Pior;107734.000000;Media;93942.339286;Tempo;1.000000
+;Profundidade;5;Melhor;23878.000000;Pior;35392.000000;Media;29235.772727;Tempo;1.000000
+;Profundidade;6;Melhor;12029.000000;Pior;24038.000000;Media;18415.250000;Tempo;1.000000
+;Profundidade;6;Melhor;12029.000000;Pior;22656.000000;Media;18171.625000;Tempo;1.000000
+Melhorou profundidade ;6
+;Profundidade;5;Melhor;20907.000000;Pior;32347.000000;Media;28180.545455;Tempo;1.000000
+Melhorou na combinação
+;Profundidade;6;Melhor;14439.000000;Pior;21017.000000;Media;17983.187500;Tempo;1.000000
+;Profundidade;6;Melhor;14439.000000;Pior;20924.000000;Media;17473.875000;Tempo;1.000000
+Melhorou profundidade ;6
+;Profundidade;5;Melhor;19040.000000;Pior;32498.000000;Media;26974.545455;Tempo;1.000000
+;Profundidade;6;Melhor;16689.000000;Pior;29250.000000;Media;22211.687500;Tempo;1.000000
+;Profundidade;5;Melhor;19040.000000;Pior;32443.000000;Media;26642.045455;Tempo;1.000000
+Melhorou profundidade ;5
+;Profundidade;4;Melhor;31479.000000;Pior;58611.000000;Media;49204.500000;Tempo;1.000000
+;Profundidade;5;Melhor;4696.000000;Pior;11089.000000;Media;8028.833333;Tempo;1.000000
+;Profundidade;4;Melhor;31479.000000;Pior;55585.000000;Media;46911.323529;Tempo;1.000000
+Melhorou profundidade ;4
+;Profundidade;5;Melhor;21890.000000;Pior;37368.000000;Media;28912.500000;Tempo;1.000000
+;Profundidade;5;Melhor;24407.000000;Pior;36451.000000;Media;29100.055556;Tempo;1.000000
+;Profundidade;5;Melhor;23199.000000;Pior;30496.000000;Media;27160.444444;Tempo;1.000000
+Melhorou na combinação
+;Profundidade;6;Melhor;13470.000000;Pior;29442.000000;Media;20057.642857;Tempo;1.000000
+;Profundidade;6;Melhor;13470.000000;Pior;24630.000000;Media;18500.785714;Tempo;1.000000
+Melhorou profundidade ;6
+;Profundidade;5;Melhor;18794.000000;Pior;35804.000000;Media;27227.722222;Tempo;1.000000
+;Profundidade;5;Melhor;18794.000000;Pior;41280.000000;Media;27096.222222;Tempo;1.000000
+Melhorou profundidade ;5
+;Profundidade;4;Melhor;24870.000000;Pior;48114.000000;Media;39656.214286;Tempo;1.000000
+;Profundidade;6;Melhor;11150.000000;Pior;32478.000000;Media;19093.571429;Tempo;1.000000
+;Profundidade;5;Melhor;19209.000000;Pior;39876.000000;Media;30823.050000;Tempo;1.000000
+;Profundidade;4;Melhor;24870.000000;Pior;43834.000000;Media;37264.214286;Tempo;1.000000
+Melhorou profundidade ;4
+;Profundidade;3;Melhor;59975.000000;Pior;109060.000000;Media;91847.089286;Tempo;1.000000
+;Profundidade;3;Melhor;59975.000000;Pior;106175.000000;Media;90986.535714;Tempo;1.000000
+Melhorou profundidade ;3
+;Profundidade;7;Melhor;10358.000000;Pior;26334.000000;Media;18523.416667;Tempo;1.000000
+;Profundidade;6;Melhor;21347.000000;Pior;39830.000000;Media;30090.900000;Tempo;1.000000
+Melhorou na combinação
+;Profundidade;7;Melhor;10112.000000;Pior;26110.000000;Media;18052.000000;Tempo;1.000000
+;Profundidade;7;Melhor;10112.000000;Pior;23508.000000;Media;16729.285714;Tempo;1.000000
+Melhorou profundidade ;7
+;Profundidade;7;Melhor;8534.000000;Pior;20483.000000;Media;13878.300000;Tempo;1.000000
+;Profundidade;7;Melhor;13881.000000;Pior;25653.000000;Media;19007.357143;Tempo;1.000000
+;Profundidade;7;Melhor;13881.000000;Pior;27581.000000;Media;20686.571429;Tempo;1.000000
+Melhorou profundidade ;7
+;Profundidade;6;Melhor;19720.000000;Pior;35837.000000;Media;29103.150000;Tempo;1.000000
+Melhorou na combinação
+;Profundidade;7;Melhor;13959.000000;Pior;28434.000000;Media;20122.642857;Tempo;1.000000
+;Profundidade;7;Melhor;13959.000000;Pior;24781.000000;Media;18641.857143;Tempo;1.000000
+Melhorou profundidade ;7
+Melhorou na combinação
+;Profundidade;7;Melhor;9976.000000;Pior;26562.000000;Media;17173.357143;Tempo;1.000000
+;Profundidade;7;Melhor;9976.000000;Pior;26750.000000;Media;16745.500000;Tempo;1.000000
+Melhorou profundidade ;7
+;Profundidade;6;Melhor;19065.000000;Pior;42278.000000;Media;28217.350000;Tempo;1.000000
+;Profundidade;7;Melhor;4745.000000;Pior;12875.000000;Media;7699.700000;Tempo;1.000000
+;Profundidade;7;Melhor;6561.000000;Pior;19542.000000;Media;12592.900000;Tempo;1.000000
+;Profundidade;6;Melhor;19065.000000;Pior;42754.000000;Media;29077.400000;Tempo;1.000000
+Melhorou profundidade ;6
+Melhorou na combinação
+;Profundidade;7;Melhor;11936.000000;Pior;29324.000000;Media;20242.285714;Tempo;1.000000
+;Profundidade;7;Melhor;11936.000000;Pior;29324.000000;Media;20646.571429;Tempo;1.000000
+Melhorou profundidade ;7
+;Profundidade;6;Melhor;15384.000000;Pior;39782.000000;Media;32635.700000;Tempo;1.000000
+;Profundidade;6;Melhor;15384.000000;Pior;45669.000000;Media;32859.750000;Tempo;1.000000
+Melhorou profundidade ;6
+;Profundidade;5;Melhor;25142.000000;Pior;57023.000000;Media;44108.500000;Tempo;1.000000
+;Profundidade;6;Melhor;8199.000000;Pior;18000.000000;Media;12965.750000;Tempo;1.000000
+;Profundidade;5;Melhor;25142.000000;Pior;56650.000000;Media;42182.928571;Tempo;1.000000
+Melhorou profundidade ;5
+;Profundidade;5;Melhor;13367.000000;Pior;30136.000000;Media;21723.571429;Tempo;1.000000
+;Profundidade;4;Melhor;38827.000000;Pior;72294.000000;Media;63981.714286;Tempo;1.000000
+;Profundidade;6;Melhor;7980.000000;Pior;20855.000000;Media;13692.750000;Tempo;1.000000
+;Profundidade;5;Melhor;22660.000000;Pior;54628.000000;Media;43140.285714;Tempo;1.000000
+;Profundidade;4;Melhor;38827.000000;Pior;77995.000000;Media;62937.214286;Tempo;1.000000
+Melhorou profundidade ;4
+;Profundidade;7;Melhor;6145.000000;Pior;14885.000000;Media;10681.900000;Tempo;1.000000
+;Profundidade;8;Melhor;9431.000000;Pior;21324.000000;Media;14164.583333;Tempo;1.000000
+;Profundidade;7;Melhor;11642.000000;Pior;32315.000000;Media;21959.944444;Tempo;1.000000
+;Profundidade;6;Melhor;15221.000000;Pior;39180.000000;Media;31051.000000;Tempo;1.000000
+;Profundidade;7;Melhor;11429.000000;Pior;29646.000000;Media;18838.625000;Tempo;1.000000
+;Profundidade;6;Melhor;15172.000000;Pior;32451.000000;Media;26132.181818;Tempo;1.000000
+;Profundidade;7;Melhor;8339.000000;Pior;16319.000000;Media;11287.928571;Tempo;1.000000
+;Profundidade;7;Melhor;10798.000000;Pior;22028.000000;Media;16665.785714;Tempo;1.000000
+;Profundidade;6;Melhor;12603.000000;Pior;27731.000000;Media;21337.277778;Tempo;1.000000
+;Profundidade;7;Melhor;12973.000000;Pior;26494.000000;Media;18813.687500;Tempo;1.000000
+;Profundidade;7;Melhor;10811.000000;Pior;28902.000000;Media;19525.500000;Tempo;1.000000
+;Profundidade;7;Melhor;13581.000000;Pior;28061.000000;Media;21487.625000;Tempo;1.000000
+;Profundidade;6;Melhor;14803.000000;Pior;33955.000000;Media;25673.545455;Tempo;1.000000
+;Profundidade;6;Melhor;8039.000000;Pior;17833.000000;Media;12026.500000;Tempo;1.000000
+;Profundidade;5;Melhor;23150.000000;Pior;48238.000000;Media;38609.781250;Tempo;1.000000
+;Profundidade;7;Melhor;10177.000000;Pior;20933.000000;Media;16865.500000;Tempo;1.000000
+;Profundidade;7;Melhor;10177.000000;Pior;23258.000000;Media;16719.083333;Tempo;1.000000
+;Profundidade;7;Melhor;10966.000000;Pior;18694.000000;Media;14881.250000;Tempo;1.000000
+;Profundidade;6;Melhor;17326.000000;Pior;36261.000000;Media;27373.700000;Tempo;1.000000
+Melhorou na combinação
+;Profundidade;7;Melhor;9266.000000;Pior;21221.000000;Media;15418.714286;Tempo;1.000000
+;Profundidade;7;Melhor;9266.000000;Pior;19876.000000;Media;15147.785714;Tempo;1.000000
+Melhorou profundidade ;7
+;Profundidade;7;Melhor;7851.000000;Pior;17431.000000;Media;12960.000000;Tempo;1.000000
+;Profundidade;6;Melhor;15413.000000;Pior;30377.000000;Media;21348.555556;Tempo;1.000000
+;Profundidade;7;Melhor;8443.000000;Pior;16161.000000;Media;11808.750000;Tempo;1.000000
+Melhorou na combinação
+Melhorou na combinação
+;Profundidade;7;Melhor;12819.000000;Pior;27415.000000;Media;18873.357143;Tempo;1.000000
+Melhorou na combinação
+;Profundidade;7;Melhor;12265.000000;Pior;24757.000000;Media;17452.285714;Tempo;1.000000
+;Profundidade;7;Melhor;12265.000000;Pior;24195.000000;Media;17361.428571;Tempo;1.000000
+Melhorou profundidade ;7
+;Profundidade;7;Melhor;7139.000000;Pior;15853.000000;Media;11775.300000;Tempo;1.000000
+;Profundidade;6;Melhor;13550.000000;Pior;29681.000000;Media;20521.222222;Tempo;1.000000
+;Profundidade;7;Melhor;4933.000000;Pior;10419.000000;Media;7334.375000;Tempo;1.000000
+;Profundidade;7;Melhor;12044.000000;Pior;25297.000000;Media;18592.357143;Tempo;1.000000
+;Profundidade;6;Melhor;13550.000000;Pior;23790.000000;Media;18659.166667;Tempo;1.000000
+Melhorou profundidade ;6
+;Profundidade;6;Melhor;12457.000000;Pior;24731.000000;Media;18837.687500;Tempo;1.000000
+;Profundidade;5;Melhor;19131.000000;Pior;42477.000000;Media;34385.785714;Tempo;1.000000

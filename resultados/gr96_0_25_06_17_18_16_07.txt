@@ -1,0 +1,18 @@
+Instância;files/eil10.xml
+Execução;1 / 1
+Tamanho da Populaçap;20
+Máximo de gerações;300
+Mutação;6
+Cruzamento;0
+% Manpulação;30
+% Mutação;20
+Print Parcial;1
+Ativa Recursivo;1
+Percentual de Redução;78
+Profundidade Máxima;10
+Percentual de Eltismo;70
+Seleção para Cruzamento (Roleta);0
+Forma de Seleção par Mutação;1
+
+
+

@@ -1,0 +1,18 @@
+Instância;files/gr96.xml
+Execução;1 / 1
+Tamanho da Populaçap;200
+Máximo de gerações;300
+Mutação;6
+Cruzamento;0
+% Manpulação;30
+% Mutação;20
+Print Parcial;1
+Ativa Recursivo;0
+Percentual de Redução;78
+Profundidade Máxima;10
+Percentual de Eltismo;70
+Seleção para Cruzamento (Roleta);0
+Forma de Seleção par Mutação;1
+
+Geração 1 / 300:;Profundidade;0;Melhor;67696.000000;Pior;381493.000000;Media;281512.030000;Tempo;21.000000
+Geração 2 / 300:;Profundidade;0;Melhor;64712.000000;Pior;392184.000000;Media;227346.420000;Tempo;41.000000
