@@ -6,7 +6,7 @@
 *
 *  PPGI - NCE - UFRJ
 *  Data Criação: 05/05/2017
-*  Datas de Modificações:
+*  Datas de Modificações: 02/07/2017
 *
 * Programa de Algorítmo Genetico para resolver tsp de forma recursiva
 * Necessário instalação da biblioteca libxml
