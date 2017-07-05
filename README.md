@@ -1,3 +1,3 @@
 # tspgit
 
-This is project based in UFRJ study.
+This project is based in UFRJ study.
