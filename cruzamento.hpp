@@ -38,7 +38,7 @@ class TCruzamento
    private:
       vector <TIndividuo *>GSTX (TIndividuo *parceiro1, TIndividuo *parceiro2);
       vector <TIndividuo *>PMX(TIndividuo *parceiro1, TIndividuo *parceiro2);
-		vector <TIndividuo *>OX1(TIndividuo *parceiro1, TIndividuo *parceiro2);
+	  vector <TIndividuo *>OX1(TIndividuo *parceiro1, TIndividuo *parceiro2);
 
 };
 #endif

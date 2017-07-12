@@ -175,7 +175,7 @@ string TIndividuo::toStringExpand ()
    for (vector< TGene *>::iterator i=VP_indice.begin(); i!=VP_indice.end(); ++i)
    {
      resultado += to_string( (*i)->id);
-	 resultado += "[";
+     resultado += "[";
      resultado += to_string( (*i)->ori );
      resultado += ",";
      resultado += to_string( (*i)->dest );
