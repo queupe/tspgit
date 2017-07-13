@@ -33,34 +33,34 @@ int TMutacao::processa (TIndividuo *individuo)
          return EM(individuo);
          break;
       }
-      case 1:
+		case 1:
       {
-         return SM(individuo);
+         return twoOPT(individuo);			
          break;
       }
       case 2:
       {
-         return twoOPT(individuo);
+         return twoOPT2(individuo);
          break;
       }
       case 3:
       {
-         return twoOPT2(individuo);
+         return threeOPT(individuo);
          break;
       }
       case 4:
       {
-         return SIM(individuo);
+         return threeOPT2(individuo);
          break;
       }
       case 5:
       {
-         return threeOPT(individuo);
+         return SM(individuo);
          break;
       }
       case 6:
       {
-         return threeOPT2(individuo);
+         return SIM(individuo);
          break;
       }
       default:

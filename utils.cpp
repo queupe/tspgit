@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include <iostream>
 
 double TUtils::fatorialStirling (int n)
 {
@@ -20,7 +21,7 @@ double TUtils::fatorialStirling (int n)
 
 void TUtils::initRnd ()
 {
-   srand(time(NULL));	
+   srand(time(NULL));
 }
 
 int TUtils::rnd(unsigned low, unsigned high)
@@ -28,3 +29,33 @@ int TUtils::rnd(unsigned low, unsigned high)
    return rand() % (high-low+1) + low;
 }
 
+double TUtils::rndd(double low, double high)
+{
+	return rndd(low, high, 1000);
+}
+
+double TUtils::rndd(double low, double high, unsigned calibracao)
+{
+	//Gerando um número randomico entre 0 e VP_MaxrndD
+   unsigned r = rand() % calibracao;
+	
+	//Após achar um randomico entre 0 e VP_MaxrndD
+	//vou converter para a escala entre low e high
+	return ((((double)r)/calibracao)*(high-low))+low;
+}
+
+/**
+ *
+ * Funcion que funciona como una moneda al aire, dependiendo de la
+ * probabilidad que esta devuelve un 1 o un 0
+ *
+ **/
+bool TUtils::flip(float prob)
+{
+   if (prob==0) return 0;
+	
+	double d = rnd(1, 10000);
+	double p = prob * 10000;
+  
+  return (d <= p)?1:0;
+}

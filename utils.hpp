@@ -2,8 +2,6 @@
 #include <random>
 #include <chrono>
 
-using namespace std;
-
 #ifndef _UTIL_H
 #define	_UTIL_H
 
@@ -19,7 +17,11 @@ class TUtils
       static double fatorialStirling (int n);
 
       static void initRnd ();
+		static void set_calibraRndD(unsigned max);
       static int rnd(unsigned low, unsigned high);
+		static double rndd(double low, double high);
+		static double rndd(double low, double high, unsigned calibracao);
+		static bool flip(float prob);
 };
 
 #endif	/* _UTIL_H */
