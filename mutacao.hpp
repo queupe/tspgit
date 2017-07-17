@@ -45,7 +45,9 @@ class TMutacao
       int SIM(TIndividuo *individuo);
       int threeOPT(TIndividuo *individuo);
       int threeOPT2(TIndividuo *individuo);
-	  
+      int DM(TIndividuo *individuo);
+      int IVM(TIndividuo *individuo);
+      int ISM(TIndividuo *individuo);
 	  //Métodos auxiliares
 	  double calcValReverso (TGene *g1, TGene *g2);
 };

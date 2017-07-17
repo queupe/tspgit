@@ -63,6 +63,21 @@ int TMutacao::processa (TIndividuo *individuo)
          return threeOPT2(individuo);
          break;
       }
+      case 7:
+      {
+         return DM(individuo);
+         break;
+      }
+      case 8:
+      {
+         return IVM(individuo);
+         break;
+      }
+      case 9:
+      {
+         return ISM(individuo);
+         break;
+      }
       default:
       {
          break;
@@ -508,6 +523,87 @@ int TMutacao::threeOPT2(TIndividuo *individuo)
    individuo->set_extra((valorInicial == individuo->get_distancia())?1:0);
    return individuo->get_extra()^1;
 }
+
+/**
+  * Mutação DM:
+  *   Nessa mutação ele pega um início e um fim randomico, retira esse pedaço do vetor principal,
+  *   depois pega uma posição randômica e reinplanta o pedaço.
+**/
+int TMutacao::DM(TIndividuo *individuo)
+{
+  int begin=0, end=0, insertpoint, i;
+  //Pega um begin e um end que n seja o começo e o fim do indivíduo.
+  while (begin == end || (begin==1 && end==individuo->get_qtdeGenes()-1));
+  {
+    begin = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+    end = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+    if(end>begin)
+    {
+      i = end;
+      end = begin;
+      begin = i;
+    }
+  }
+  //Pega um ponto de inserção que não seja ne esteja entre o begin e o end.
+  insertpoint = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+  while(insertpoint>=begin && insertpoint<=end)
+  {
+    insertpoint = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+  }
+  //Remove o pedaço e coloca no ponto de inserção.
+  individuo->troca_sub(insertpoint+1, 0, begin, (end-begin));
+
+  return 1;
+}
+
+/**
+  * IVM:
+  *   Nessa mutação ele pega um início e um fim randomico, retira esse pedaço do vetor principal,
+  *   depois pega uma posição randômica e reinplanta o pedaço em ordem invertida.
+**/
+int TMutacao::IVM(TIndividuo *individuo)
+{
+  int begin, end, insertpoint, i;
+  //Pega um begin e um end que n seja o começo e o fim do indivíduo.
+  while (begin == end || (begin==1 && end==individuo->get_qtdeGenes()-1));
+  {
+    begin = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+    end = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+    if(end>begin)
+    {
+      i = end;
+      end = begin;
+      begin = i;
+    }
+  }
+  //Pega um ponto de inserção que não seja ne esteja entre o begin e o end.
+  insertpoint = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+  while(insertpoint>=begin && insertpoint<=end)
+  {
+    insertpoint = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+  }
+  //Remove o pedaço e coloca invertido no ponto de inserção. (begin-end) será um número negativo.
+  individuo->troca_sub(insertpoint+1, 0, begin, (begin-end));
+
+  return 1;
+}
+/**
+  * ISM:
+  *   Tira um gene randômico do indivíduo e coloca em uma posição randômica.
+**/
+int TMutacao::ISM(TIndividuo *individuo)
+{
+  int i=0, j=0;
+  while(i==j)
+  {
+    i = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+    j = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+  }
+  individuo->troca_sub(i, 1, j+1, 0);
+
+  return 1;
+}
+
 
 /*************************
 *  Métodos auxiliares
