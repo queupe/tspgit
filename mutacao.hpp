@@ -49,6 +49,7 @@ class TMutacao
       int IVM(TIndividuo *individuo);
       int ISM(TIndividuo *individuo);
       int GSM(TIndividuo *individuo);
+      int DBM(TIndividuo *individuo);
 	  //Métodos auxiliares
 	  double calcValReverso (TGene *g1, TGene *g2);
 };

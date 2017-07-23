@@ -78,6 +78,16 @@ int TMutacao::processa (TIndividuo *individuo)
          return ISM(individuo);
          break;
       }
+      case 10:
+      {
+         return GSM(individuo);
+         break;
+      }
+      case 11:
+      {
+         return DBM(individuo);
+         break;
+      }
       default:
       {
          break;
@@ -635,6 +645,33 @@ int TMutacao::GSM(TIndividuo *individuo)
       break;
     }
   }
+
+  return 1;
+}
+/**
+  *DBM:
+  *  O flag no contreras estava inicializado false, mas isso n tem sentido pq o loop fica inútil.
+  *  
+**/
+
+int TMutacao::DBM(TIndividuo *individuo)
+{
+  int i, j, k, l;
+  bool flag=true;
+  do
+  {
+    i = TUtils::rnd(1, individuo->get_qtdeGenes() - 7);
+    j = i+2;
+    k = TUtils::rnd(1, individuo->get_qtdeGenes() - 3);
+    l = k+2;
+    if(j+1 < k)
+    {
+      flag = false;
+    }
+  } while (flag);
+
+  individuo->troca_indice((i+1)%individuo->VP_qtdeGenes, (k+1)%individuo->VP_qtdeGenes);
+  individuo->troca_indice(j, l);
 
   return 1;
 }
