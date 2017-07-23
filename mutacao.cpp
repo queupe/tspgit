@@ -603,6 +603,41 @@ int TMutacao::ISM(TIndividuo *individuo)
 
   return 1;
 }
+/**
+  * GSM:
+  *   Durante um número k<=quantidade de genes, pega-se indices de genes i,j randômicos dentro do
+  *   individuo, testa se a troca do genes gera um caminho mais rápido, se for o caso, troca os genes
+  *   e quebra o loop.
+**/
+int TMutacao::GSM(TIndividuo *individuo)
+{
+  int i=0, j=0;
+
+  for(int k=0; k < individuo->VP_qtdeGenes; k++)
+  {
+    while(i==j)
+    {
+      i = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+      j = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
+    }
+    if((individuo->VP_Mapa->get_distancia(individuo->VP_direto[i]->ant->i, individuo->VP_direto[i]->i) +
+        individuo->VP_Mapa->get_distancia(individuo->VP_direto[i]->i, individuo->VP_direto[i]->prox->i)+
+        individuo->VP_Mapa->get_distancia(individuo->VP_direto[j]->ant->i, individuo->VP_direto[j]->i) +
+        individuo->VP_Mapa->get_distancia(individuo->VP_direto[j]->i, individuo->VP_direto[j]->prox->i))
+        >
+       (individuo->VP_Mapa->get_distancia(individuo->VP_direto[i]->ant->i, individuo->VP_direto[j]->i) +
+        individuo->VP_Mapa->get_distancia(individuo->VP_direto[j]->i, individuo->VP_direto[i]->prox->i)+
+        individuo->VP_Mapa->get_distancia(individuo->VP_direto[j]->ant->i, individuo->VP_direto[i]->i) +
+        individuo->VP_Mapa->get_distancia(individuo->VP_direto[i]->i, individuo->VP_direto[j]->prox->i))
+      )
+    {
+      individuo->troca_indice(i, j);
+      break;
+    }
+  }
+
+  return 1;
+}
 
 
 /*************************
