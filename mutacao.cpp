@@ -73,21 +73,21 @@ int TMutacao::processa (TIndividuo *individuo)
          return IVM(individuo);
          break;
       }
-      // case 9:
-      // {
-      //    return ISM(individuo);
-      //    break;
-      // }
-      // case 10:
-      // {
-      //    return GSM(individuo);
-      //    break;
-      // }
-      // case 11:
-      // {
-      //    return DBM(individuo);
-      //    break;
-      // }
+      case 9:
+      {
+         return ISM(individuo);
+         break;
+      }
+      case 10:
+      {
+         return GSM(individuo);
+         break;
+      }
+      case 11:
+      {
+         return DBM(individuo);
+         break;
+      }
       default:
       {
          break;
@@ -541,14 +541,15 @@ int TMutacao::threeOPT2(TIndividuo *individuo)
 **/
 int TMutacao::DM(TIndividuo *individuo)
 {
-  int begin=0, end=0, insertpoint, k;
+  int begin=0, end=0, insertpoint, diff;
+  int lastindex = individuo->get_qtdeGenes() -1;
   
-  begin = TUtils::rnd(1, individuo->get_qtdeGenes() - 2);
-  end = TUtils::rnd(begin, individuo->get_qtdeGenes() - 1);
-  k = end-begin;
-  insertpoint = TUtils::rnd(1, k);
-  if(insertpoint > begin) insertpoint+= k;
-  cout<<begin<<" "<<end<<" "<<k<<" "<<insertpoint<<endl;
+  begin = TUtils::rnd(1, lastindex -1);
+  end = TUtils::rnd(begin+1, lastindex);
+  diff = end-begin;
+  insertpoint = TUtils::rnd(1, lastindex - diff);
+  if(insertpoint > begin) insertpoint+= diff;
+  //cout<<begin<<" "<<end<<" "<<diff<<" "<<insertpoint<<endl;
   individuo->troca_sub(insertpoint+1, 0, begin, (end-begin)+1);
 
   return 1;
@@ -561,95 +562,88 @@ int TMutacao::DM(TIndividuo *individuo)
 **/
 int TMutacao::IVM(TIndividuo *individuo)
 {
-  int begin, end, insertpoint, k;
-  begin = TUtils::rnd(1, individuo->get_qtdeGenes() - 2);
-  end = TUtils::rnd(begin, individuo->get_qtdeGenes() - 1);
-  k = end-begin;
-  insertpoint = TUtils::rnd(1, k);
-  if(insertpoint > begin) insertpoint+= k;
-  individuo->troca_sub(insertpoint+1, 0, begin, end-begin);
+  int begin=0, end=0, insertpoint, diff;
+  int lastindex = individuo->get_qtdeGenes() -1;
+  
+  begin = TUtils::rnd(1, lastindex -1);
+  end = TUtils::rnd(begin+1, lastindex);
+  diff = end-begin;
+  insertpoint = TUtils::rnd(1, lastindex - diff);
+  if(insertpoint > begin) insertpoint+= diff;
+  //cout<<begin<<" "<<end<<" "<<diff<<" "<<insertpoint<<endl;
+  individuo->troca_sub(insertpoint+1, 0, begin, -((end-begin)+1));
 
   return 1;
 }
-// 
-// /**
-//   * ISM:
-//   *   Tira um gene randômico do indivíduo e coloca em uma posição randômica.
-// **/
-// int TMutacao::ISM(TIndividuo *individuo)
-// {
-//   int i=0, j=0;
-//   while(i==j)
-//   {
-//     i = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
-//     j = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
-//   }
-//   individuo->troca_sub(i, 1, j+1, 0);
-// 
-//   return 1;
-// }
-// /**
-//   * GSM:
-//   *   Durante um número k<=quantidade de genes, pega-se indices de genes i,j randômicos dentro do
-//   *   individuo, testa se a troca do genes gera um caminho mais rápido, se for o caso, troca os genes
-//   *   e quebra o loop.
-// **/
-// int TMutacao::GSM(TIndividuo *individuo)
-// {
-//   int i=0, j=0;
-// 
-//   for(int k=0; k < individuo->get_qtdeGenes(); k++)
-//   {
-//     while(i==j)
-//     {
-//       i = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
-//       j = TUtils::rnd(1, individuo->get_qtdeGenes() - 1);
-//     }
-//     if((individuo->VP_Mapa->get_distancia(individuo->VP_direto[i]->ant->i, individuo->VP_direto[i]->i) +
-//         individuo->VP_Mapa->get_distancia(individuo->VP_direto[i]->i, individuo->VP_direto[i]->prox->i)+
-//         individuo->VP_Mapa->get_distancia(individuo->VP_direto[j]->ant->i, individuo->VP_direto[j]->i) +
-//         individuo->VP_Mapa->get_distancia(individuo->VP_direto[j]->i, individuo->VP_direto[j]->prox->i))
-//         >
-//        (individuo->VP_Mapa->get_distancia(individuo->VP_direto[i]->ant->i, individuo->VP_direto[j]->i) +
-//         individuo->VP_Mapa->get_distancia(individuo->VP_direto[j]->i, individuo->VP_direto[i]->prox->i)+
-//         individuo->VP_Mapa->get_distancia(individuo->VP_direto[j]->ant->i, individuo->VP_direto[i]->i) +
-//         individuo->VP_Mapa->get_distancia(individuo->VP_direto[i]->i, individuo->VP_direto[j]->prox->i))
-//       )
-//     {
-//       individuo->troca_indice(i, j);
-//       break;
-//     }
-//   }
-// 
-//   return 1;
-// }
-// /**
-//   *DBM:
-//   *  O flag no contreras estava inicializado false, mas isso n tem sentido pq o loop fica inútil.
-//   *  
-// **/
-// 
-// int TMutacao::DBM(TIndividuo *individuo)
-// {
-//   int i, j, k, l;
-//   bool flag=true;
-//   do
-//   {
-//     i = TUtils::rnd(1, individuo->get_qtdeGenes() - 7);
-//     j = i+2;
-//     k = TUtils::rnd(1, individuo->get_qtdeGenes() - 3);
-//     l = k+2;
-//     if(j+1 < k)
-//     {
-//       flag = false;
-//     }
-//   } while (flag);
-// 
-//   individuo->troca_indice((i+1)%individuo->get_qtdeGenes(), (k+1)%individuo->get_qtdeGenes());
-//   individuo->troca_indice(j, l);
-// 
-//   return 1;
-// }
+
+/**
+  * ISM:
+  *   Tira um gene randômico do indivíduo e coloca em uma posição randômica.
+**/
+int TMutacao::ISM(TIndividuo *individuo)
+{
+  int i=0, j=0, lastindex = individuo->get_qtdeGenes();
+  i = TUtils::rnd(1, lastindex - 2);
+  j = TUtils::rnd(i+1, lastindex - 1);
+  cout<<i<<" "<<j<<endl;
+  individuo->troca_sub(i, 1, j+1, 0);
+
+  return 1;
+}
+/**
+  * GSM:
+  *   Durante um número k<=quantidade de genes, pega-se indices de genes i,j randômicos dentro do
+  *   individuo, testa se a troca do genes gera um caminho mais rápido, se for o caso, troca os genes
+  *   e quebra o loop.
+**/
+int TMutacao::GSM(TIndividuo *individuo)
+{
+  int i=0, j=0, lastindex = individuo->get_qtdeGenes()-1;
+  double originaldist=0, changeddist=0;
+
+  for(int k=0; k <= lastindex; k++)
+  {
+    
+    i = TUtils::rnd(1, lastindex - 1);
+    j = TUtils::rnd(i+1, lastindex);
+    originaldist = individuo->get_distancia();
+    individuo->troca_indice(i,j);
+    changeddist = individuo->get_distancia();
+    //cout<<"i: "<<i<<";j: "<<j<<"; OD: "<<originaldist<<"; CD: "<<changeddist<<endl;
+    if(originaldist > changeddist)
+    {
+      cout<<"loopbreak."<<endl;
+      //cout<<individuo->toString()<<endl;
+      break;
+    }
+    else
+    {
+      individuo->troca_indice(i,j);
+    }
+  }
+
+  return 1;
+}
+/**
+  *DBM:
+  *  O flag no contreras estava inicializado false, mas isso n tem sentido pq o loop fica inútil.
+  *  
+**/
+
+int TMutacao::DBM(TIndividuo *individuo)
+{
+  int i, j, k, l, lastindex =  individuo->get_qtdeGenes()-1;
+  
+  i = TUtils::rnd(1, lastindex - 6);
+  j = i+2;
+  k = TUtils::rnd(j+2, lastindex - 2);
+  l = k+2;
+  cout<<"i: "<<i<<"; j: "<<j<<"; k: "<<k<<"; l: "<<l<<endl;
+  individuo->troca_indice((i+1)%individuo->get_qtdeGenes(), (k+1)%individuo->get_qtdeGenes());
+  individuo->troca_indice(j, l);
+
+  return 1;
+}
 
 
 /*************************
