@@ -88,6 +88,11 @@ int TMutacao::processa (TIndividuo *individuo)
          return DBM(individuo);
          break;
       }
+      case 12:
+      {
+         return DBM2(individuo);
+         break;
+      }
       default:
       {
          break;
@@ -639,8 +644,29 @@ int TMutacao::DBM(TIndividuo *individuo)
   k = TUtils::rnd(j+2, lastindex - 2);
   l = k+2;
   cout<<"i: "<<i<<"; j: "<<j<<"; k: "<<k<<"; l: "<<l<<endl;
-  individuo->troca_indice((i+1)%individuo->get_qtdeGenes(), (k+1)%individuo->get_qtdeGenes());
+  individuo->troca_indice((i+1), (k+1));
   individuo->troca_indice(j, l);
+
+  return 1;
+}
+
+/**
+  *DBM2:
+  *  Essa me confundiu um pouco, mas depois de ler o código percebi que o que ele faz é pegar quatro
+  *  indices em sequencia e depois realizar uma troca de subrotas.
+  *  
+**/
+
+int TMutacao::DBM2(TIndividuo *individuo)
+{
+  int i, j, k, l, lastindex = individuo->get_qtdeGenes()-1;
+
+  i = TUtils::rnd(1, lastindex - 6);
+  j = TUtils::rnd(i+1, lastindex - 4);
+  k = TUtils::rnd(j+1, lastindex - 2);
+  l = TUtils::rnd(k+1, lastindex);
+  cout<<"i: "<<i<<"; j: "<<j<<"; k: "<<k<<"; l:"<<l<<endl;
+  individuo->troca_sub(i+1, (j-i), k+1, (l-k));
 
   return 1;
 }
