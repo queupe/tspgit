@@ -93,6 +93,11 @@ int TMutacao::processa (TIndividuo *individuo)
          return DBM2(individuo);
          break;
       }
+      case 13:
+      {
+         return SHMO(individuo);
+         break;
+      }
       default:
       {
          break;
@@ -668,6 +673,42 @@ int TMutacao::DBM2(TIndividuo *individuo)
   cout<<"i: "<<i<<"; j: "<<j<<"; k: "<<k<<"; l:"<<l<<endl;
   individuo->troca_sub(i+1, (j-i), k+1, (l-k));
 
+  return 1;
+}
+/**
+  *SHMO:
+  *  Esse é pesado. Dentro desse O(n^2) aí, ele realiza três testes de troca.
+  *  Os testes estão descritos abaixo. Não achei modos de simplificar esse n^2.
+  *  
+**/
+int TMutacao::SHMO(TIndividuo *individuo)
+{
+  int  lastindex = individuo->get_qtdeGenes()-1;
+  double value, new_value;
+
+  for(int i=1;i<lastindex-2; i++)
+  {
+    for(int j=i+2; j<lastindex;j++)
+    {
+      //Primeira troca: Testa se a inversão entre i+1 e j+1 vale a pena.
+      value = individuo->get_distancia();
+      new_value = individuo->get_dist_sub_reverso_indice(i+1, j+1);
+      if(value>new_value)
+      {
+        individuo->inverte_sub_indice(i+1, j+1);
+      }
+      //Segunda troca: Testa se tirando j e colocar antes do i vale a pena.
+      value = individuo->get_distancia();
+      individuo->troca_sub(i, 0, j, 1);
+      new_value = individuo->get_distancia();
+      if(new_value > value) individuo->troca_sub(i, 1, j, 0);
+      //Terceira troca: Testa se trocar i pelo j vale a pena.
+      value = individuo->get_distancia();
+      individuo->troca_indice(i,j);
+      new_value = individuo->get_distancia();
+      if(new_value > value) individuo->troca_indice(i,j);
+    }
+  }
   return 1;
 }
 
