@@ -35,11 +35,11 @@ void TConfig::leInfo(xmlDocPtr doc, xmlNode * a_node)
          else if (!xmlStrcmp(cur_node->name, (xmlChar *)"numExec")) numExec = val;
          else if (!xmlStrcmp(cur_node->name, (xmlChar *)"mutacao")) mutacao = val;
          else if (!xmlStrcmp(cur_node->name, (xmlChar *)"cruzamento")) cruzamento = val;
-         else if (!xmlStrcmp(cur_node->name, (xmlChar *)"ativaRecursivo")) ativaRecursivo = val;
+         else if (!xmlStrcmp(cur_node->name, (xmlChar *)"percentMutacaoRecursiva")) percentMutacaoRecursiva = val;
          else if (!xmlStrcmp(cur_node->name, (xmlChar *)"percentElitismo")) percentElitismo = val;
-         else if (!xmlStrcmp(cur_node->name, (xmlChar *)"roleta")) roleta = val;
+         else if (!xmlStrcmp(cur_node->name, (xmlChar *)"selecao")) selecao = val;
          else if (!xmlStrcmp(cur_node->name, (xmlChar *)"selIndMutacao")) selIndMutacao = val;
-		 else if (!xmlStrcmp(cur_node->name, (xmlChar *)"profundidadeMaxima")) profundidadeMaxima = val;
+		   else if (!xmlStrcmp(cur_node->name, (xmlChar *)"profundidadeMaxima")) profundidadeMaxima = val;
 
       }
 
@@ -52,16 +52,18 @@ TConfig::TConfig()
    tamPopulacao = 200;
    maxGeracao = 300;
    percentManipulacao = 30;
-   percentMutacao = 20;
+   percentMutacao = 1;
+	percentMutacaoRecursiva = 0;
    percentReducao = 50;
    numExec = 2;
    mutacao = 0;
    cruzamento = 0;
    printParcial = 0;
-   ativaRecursivo = 0;
+   percentMutacaoRecursiva = 0;
    percentReducao = 75;
    percentElitismo = 70;
    profundidadeMaxima = 5;
+	selecao = 0;
 }
 
 void TConfig::carregaDoArquivo(char *nomeArquivo)

@@ -24,7 +24,7 @@ TCruzamento::TCruzamento (TMapaGenes *mapa, TArqLog *arqSaida, int tipoCruzament
    VP_cruzamento = tipoCruzamento;
 }
 
-vector <TIndividuo *>TCruzamento::processa (TIndividuo *parceiro1, TIndividuo *parceiro2)
+vector <TIndividuo *>TCruzamento::processa (TIndividuo *parceiro1, TIndividuo *parceiro2, TPopulacao *populacao, int maxGeracao, int geracao)
 {
    switch (VP_cruzamento)
    {
@@ -45,6 +45,62 @@ vector <TIndividuo *>TCruzamento::processa (TIndividuo *parceiro1, TIndividuo *p
       }
       case 3:
       {
+			return OX2(parceiro1, parceiro2);
+         break;
+      }
+      case 4:
+      {
+			return MOX(parceiro1, parceiro2);
+         break;
+      }
+      case 5:
+      {
+			return POS(parceiro1, parceiro2);
+         break;
+      }
+      case 6:
+      {
+			return CX(parceiro1, parceiro2);
+         break;
+      }
+      case 7:
+      {			
+			return DPX(parceiro1, parceiro2);
+         break;
+      }
+      case 8:
+      {
+			return AP(parceiro1, parceiro2);
+         break;
+      }
+      case 9:
+      {			
+			return MPX(parceiro1, parceiro2);
+         break;
+      }
+      case 10:
+      {
+			return HX(parceiro1, parceiro2);
+         break;
+      }
+      case 11:
+      {
+			return IO(parceiro1, populacao);
+         break;
+      }
+      case 12:
+      {
+			return MIO(parceiro1, populacao, maxGeracao, geracao);
+         break;
+      }
+      case 13:
+      {
+			return VR(parceiro1, parceiro2, populacao);
+         break;
+      }
+      case 14:
+      {
+			return ER(parceiro1, parceiro2);
          break;
       }
       default:
@@ -206,20 +262,17 @@ vector <TIndividuo *>TCruzamento::OX1(TIndividuo *parceiro1, TIndividuo *parceir
 	TIndividuo *filho1 = parceiro1->clona();
    TIndividuo *filho2 = parceiro2->clona();
 
+	filhos.push_back(filho1);
+	filhos.push_back(filho2);
+
    //Para executar esse cruzamento a quantdade de genes tem 
 	// que ser maior que 3.
-	if (parceiro1->get_qtdeGenes()<=3)
-	{
-		filhos.push_back(filho1);
-		filhos.push_back(filho2);
-		return filhos;
-	}
+	if (parceiro1->get_qtdeGenes()<=3) return filhos;
 	
 	int uInicio, uFin;
 	uInicio = TUtils::rnd(1, filho1->get_qtdeGenes()-3);
 	uFin = TUtils::rnd(uInicio+1, filho1->get_qtdeGenes()-2);
 
-	//  vector <unsigned> aux = child1;
 	TGene *it1;
 	TGene *it2;
 	int j = uFin;
@@ -285,9 +338,6 @@ vector <TIndividuo *>TCruzamento::OX1(TIndividuo *parceiro1, TIndividuo *parceir
       }
 	}
 	
-   filhos.push_back(filho1);
-   filhos.push_back(filho2);
-	
 	return filhos;
 }
 
@@ -299,44 +349,65 @@ vector <TIndividuo *>TCruzamento::OX1(TIndividuo *parceiro1, TIndividuo *parceir
  * Handbook of Genetic Algorithms, 332–349. New York: Van Nostrand Reinhold.
  *
  **/
-bool Crossover::OX2(vector <unsigned> &child1, vector <unsigned> child2)
+vector <TIndividuo *>TCruzamento::OX2(TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
-  vector<unsigned> child1Aux = child1;
-  vector<unsigned> child2Aux = child2;
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+   TIndividuo *filho2 = parceiro2->clona();
 
-  // child1.swap(child2);
-  int j = 1, k = child1.size() * 0.4;
+   // a quantidade de cidades a ser trocada
+   unsigned qtdeTroca = parceiro1->get_qtdeGenes() * 0.4;
 
+   //as posições selecionadas nos parceiros, já em ordem e sem repetição
+   set<int> pPar1;
+   set<int> pPar2;
+			
+   TGene *tmp;				
+   int posicao;
+	//Obs pPar1.size = pPar2.size. Se incluir em um, inclui no outro
+	//Se não incluir em um, não incluirá no outro.
+	while (pPar1.size() < qtdeTroca)
+	{	
+		//Seleção aleatória
+		posicao = TUtils::rnd(1, parceiro1->get_qtdeGenes() - 1);
+		pPar1.insert (posicao);
+		
+		//Identificando a cidade no parceiro 1
+		tmp = parceiro1->get_por_indice(posicao);
+		//Buscando a mesma cidade no Parceiro 2
+		tmp = parceiro2->get_por_id(tmp->id);
+		//Guardando a posição da cidade no Parceiro 2
+		pPar2.insert(tmp->i);		
+	}
 
-  //(ciudad, posición)
-  map<int, int> position;
-  map<int, int> positionInv;
-  int found = rnd(0, sizeChrm - 1);
-  position.insert(pair<int, int>(child1[found], found));
-  positionInv.insert(pair<int, int>(found, child1[found]));
-  do {
-    found = rnd(0, sizeChrm - 1);
-    if(position.find(child1[found]) == position.end())
-      {
-        position.insert(pair<int, int>(child1[found], found));
-        positionInv.insert(pair<int, int>(found, child1[found]));
-        j++;
-      }
-  }
-  while(j < k);
+   TGene *g1;
+	TGene *g2;
+	
+	set<int>::iterator it1;
+	set<int>::iterator it2;
+   //Realizando as trocas
+	for (it1=pPar1.begin(), it2 = pPar2.begin(); it1!=pPar1.end() && it2!=pPar2.end(); ++it1, ++it2)
+	{
+		//Troca no filho 1
+		g1 = filho1->get_por_indice(*it1);
+		g2 = parceiro2->get_por_indice(*it2);
+		filho1->troca(g1->id, g2->id);
+		
+		//trocando no filho 2
 
-  map<int,int>::iterator itC1 = positionInv.begin();
-  for(j = 0; j < child2.size(); j++)
-    if((position.find(child2Aux[j])) != position.end())
-      {
-        child1[itC1->first] = child2Aux[j];
-        child2[j] = child1Aux[itC1->first];
-        itC1++;
-      }
+	   g1 = filho2->get_por_indice(*it2);
+		g2 = parceiro1->get_por_indice(*it1);
+		filho2->troca(g1->id, g2->id);
+	}
 
-  return true;
+   pPar1.clear();
+   pPar2.clear();
+	
+   filhos.push_back(filho1);
+   filhos.push_back(filho2);
+	
+	return filhos;
 }
-
 
 /**
  *
@@ -345,37 +416,39 @@ bool Crossover::OX2(vector <unsigned> &child1, vector <unsigned> child2)
  * New Operators of Genetic Algorithms for Traveling Salesman Problem
  *
  **/
-bool Crossover::MOX(vector <unsigned> &child1, vector <unsigned> child2)
+vector <TIndividuo *>TCruzamento::MOX(TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
 
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	
+	filhos.push_back(filho1);
 
-  vector<unsigned> child1Aux = child1;
-  vector<unsigned> child2Aux = child2;
-  int point = rnd(1, sizeChrm - 2)+1;
+   //No mínimo os 2 primeiro genes serão mantidos ou 1 gene será trocado
+	//Para isso, a quantidade de genes tem que ser no mínio 3
+	if (parceiro1->get_qtdeGenes()<3) return filhos;
 
-  vector<unsigned> position1(child1Aux.begin(), child1Aux.begin() + point);
+   int point = TUtils::rnd(2, parceiro1->get_qtdeGenes() - 1);
+	
+	TGene *tmp;
+	for (int i=1, k=point; i < parceiro1->get_qtdeGenes(); i++)
+	{
+		//Pegando a cidade no parceiro 2
+		tmp = parceiro2->get_por_indice(i);
+		//Encontrando a mesma cidade no filho 1
+      tmp = filho1->get_por_id(tmp->id);
+		
+		//Se a cidade estiver fora da parte imutável do filho
+		//passa a fazer parte do filho na mesma sequência do parceiro 2
+		if(tmp->i >= point)
+		{
+			filho1->troca_indice(k, tmp->i);
+			k++;
+		}
+	}
 
-  vector<unsigned> position2(child2Aux.begin(), child2Aux.begin() + point);
-
-  for(int j = 0, k = point; j < child1.size(); j++)
-    if(find(position2.begin(), position2.end(), child1Aux[j]) == position2.end())
-      {
-        child1[j] = child2Aux[k];
-        k++;
-      }
-
-  for(int j = 0, k = point; j < child2.size(); j++)
-    if(find(position1.begin(), position1.end(), child2Aux[j]) == position1.end())
-      {
-
-        child2[j] = child1Aux[k];
-        k++;
-      }
-
-
-  return true;
+   return filhos;
 }
-
 
 /**
  *
@@ -385,83 +458,72 @@ bool Crossover::MOX(vector <unsigned> &child1, vector <unsigned> child2)
  * Handbook of Genetic Algorithms, 332–349. New York: Van Nostrand Reinhold.
  *
  **/
-bool Crossover::POS(vector <unsigned> &child1, vector <unsigned> child2)
+vector <TIndividuo *>TCruzamento::POS(TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
-  vector<unsigned> child1Aux = child1;
-  vector<unsigned> child2Aux = child2;
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	
+	filhos.push_back(filho1);
 
-  int j = 1, k = child1.size() * 0.4;
+   // a quantidade de cidades a ser trocada
+   unsigned qtdeTroca = parceiro1->get_qtdeGenes() * 0.4;
 
-  //(ciudad, posición)
-  map<int, int> position;
-  map<int, int> positionInv;
-  int found = rnd(0, sizeChrm - 1);
-  position.insert(pair<int, int>(child1[found], found));
-  positionInv.insert(pair<int, int>(found, child1[found]));
-  do {
-    found = rnd(0, sizeChrm - 1);
-    if(position.find(child1[found]) == position.end())
-      {
-        position.insert(pair<int, int>(child1[found], found));
-        positionInv.insert(pair<int, int>(found, child1[found]));
-        j++;
-      }
-  }
-  while(j < k);
+   //as posições no parceiro 1 a serem trocadas, já em ordem e sem repetição
+   set<int> pPar1;
+	//as posições dos genes que serão fixados 
+	set<int> pPar2;
+			
+   int posicao;
 
-  vector<int> cambio;
+	while (pPar1.size() < qtdeTroca)
+	{	
+		//Seleção aleatória
+		posicao = TUtils::rnd(1, parceiro1->get_qtdeGenes() - 1);
+		pPar1.insert (posicao);
+	}
 
-  for(map<int,int>::iterator ita=positionInv.begin(); ita!=positionInv.end(); ++ita)
-    {
-      child1[ita->first] = child2Aux[ita->first];
-      child2[ita->first] = child1Aux[ita->first];
-      cambio.push_back(child1[ita->first]);
-    }
+   TGene *g1;
+	TGene *g2;
+	
+	set<int>::iterator it1;
+	set<int>::iterator it2;
 
-  //para que no se caíga con los itC1++
-  positionInv.insert(pair<int, int>(sizeChrm+10, sizeChrm+10));
-  map<int,int>::iterator itC1 = positionInv.begin();
-  int i = 0;
-  for(j = 0; j < child1.size(); j++)
-    if(find(cambio.begin(), cambio.end(), child1Aux[j]) == cambio.end())
-      {
-        if(i == itC1->first)
-          {
-            i++;
-            itC1++;
-          }
-        while(i == itC1->first)
-          {
-            i++;
-            itC1++;
-          }
-        child1[i] = child1Aux[j];
-        i++;
-      }
+   //Realizando as trocas
+	for (it1=pPar1.begin(); it1!=pPar1.end(); ++it1)
+	{
+		//Troca no filho 1 pelo referente na mesma posição
+		//no parceiro 2
+		g1 = filho1->get_por_indice(*it1);
+		g2 = parceiro2->get_por_indice(*it1);
+		filho1->troca(g1->id, g2->id);
 
-  itC1 = positionInv.begin();
-  i = 0;
+      //Se g2 é fixado no filho guardo sua posição	Parceiro 1
+		g1 = parceiro1->get_por_id(g2->id);
+		pPar2.insert(g1->i);
+	}
+	
+	//ajustando a ordem dos genes não fixados que devem
+	//permanecer na mesma orde que parceiro 1
+	it1 = pPar1.begin();
+	it2 = pPar2.begin();
+	
+	for (int pos1=0, pos2=0; pos1 < parceiro1->get_qtdeGenes(); pos1++, pos2++)
+	{
+		//Aproveitando o fato de pPar1 e pPar2 estarem ordenados
+		while (pos1==*it1) { pos1++; it1++; }
+		while (pos2==*it2) { pos2++; it2++; }
+		
+		if (pos1 >= filho1->get_qtdeGenes() || pos2 >= parceiro1->get_qtdeGenes()) break;
+		g1 = filho1->get_por_indice(pos1);
+		g2 = parceiro1->get_por_indice(pos2);
+		
+		filho1->troca (g1->id, g2->id);
+	}
+	
+   pPar1.clear();
+   pPar2.clear();
 
-  for(j = 0; j < child1.size(); j++)
-    if(position.find(child2Aux[j]) == position.end())
-      {
-
-        if(i == itC1->first)
-          {
-            i++;
-            itC1++;
-          }
-        while(i == itC1->first)
-          {
-            i++;
-            itC1++;
-          }
-
-        child2[i] = child2Aux[j];
-        i++;
-      }
-
-  return true;
+	return filhos;
 }
 
 /**
@@ -474,34 +536,35 @@ bool Crossover::POS(vector <unsigned> &child1, vector <unsigned> child2)
  * 224–230. Hillsdale, New Jersey: Lawrence Erlbaum.
  *
  **/
-bool Crossover::CX(vector <unsigned> &child1, vector <unsigned> &child2)
+vector <TIndividuo *>TCruzamento::CX(TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
-  int i,j, aux;
-  vector <unsigned> ciclo;
-  vector <unsigned> position;
-  vector <unsigned> child(sizeChrm, child1.size());
-  vector<unsigned>::iterator it;
-  i = 0;
-  position.push_back(0);
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	TIndividuo *filho2 = parceiro2->clona();
+	
+	filhos.push_back(filho1);
+	filhos.push_back(filho2);
 
-  while(true)
-    {
-      j = find(child1.begin(), child1.end(), child2[i]) - child1.begin();
-      position.push_back(j);
-      if(child1[0] == child2[j])
-        {
-          break;
-        }
-      i = j;
-    }
-
-  for(int k = 0; k < position.size(); k++)
-    {
-      aux = child1[position[k]];
-      child1[position[k]] = child2[position[k]];
-      child2[position[k]] = aux;
-    }
-  return true;
+	//Selecionando o primeiro gene a ser trocado
+	TGene *g1;
+	TGene *g2;
+	int ini;
+	for (ini = 1; ini < filho1->get_qtdeGenes(); ini++)
+	{
+		g1 =  filho1->get_por_indice(ini);
+		g2 =  parceiro2->get_por_indice(ini);
+		
+		if (g1->id != g2->id) break;
+	}
+	
+   while (g1->id != g2->id)
+	{
+	   filho1->troca (g1->id, g2->id);
+		filho2->troca (g1->id, g2->id);
+		g2 = parceiro2->get_por_indice(g1->i);
+	}
+		
+	return filhos;
 }
 
 /**
@@ -514,135 +577,97 @@ bool Crossover::CX(vector <unsigned> &child1, vector <unsigned> &child2)
  * 1996. (pp. 616–621).
  *
  **/
-bool Crossover::DPX(vector <unsigned> &child1, vector <unsigned> child2, TSP *tsp1)
+vector <TIndividuo *>TCruzamento::DPX(TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
-  vector<vector<unsigned> > fragmento;
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	filhos.push_back(filho1);
 
-  // for(int i = 0; i < child1.size(); i++)
-  //   cout << child1[i] << " ";
-  // cout << endl;
+	vector<TGene *> fragmentoIni;
+	vector<TGene *> fragmentoFim;
+	TGene *g1;
+	TGene *g2;
+	
+	bool primeiro = true;
+	
+	for (int i = 0; i < filho1->get_qtdeGenes(); i++)
+	{
+		g1 = filho1->get_por_indice(i);
+		g2 = parceiro2->get_por_id(g1->id);
+		
+		if (primeiro) 
+		{
+			fragmentoIni.push_back(g1);
+			primeiro = false;
+		}
+		
+		if ((g1->prox->id != g2->prox->id)||(g1->prox->id==0))
+      {
+			fragmentoFim.push_back(g1);
+         primeiro = true;
+      }
+	}
 
-  // for(int i = 0; i < child2.size(); i++)
-  //   cout << child2[i] << " ";
-  // cout << endl;
-  for(int i = 0; i < child1.size(); i++)
-    {
-      unsigned found = find(child2.begin(), child2.end(), child1[i]) - child2.begin();
-      // cout << found << endl;
-      vector<unsigned> v;
-      for(int j = found, k = 0; j < child2.size() && i < child1.size(); j++, i++)
-      	{
-      	  if(child2[j] == child1[i])
-      	    {
-              // cout << "\t" << child2[j] << endl;
-      	      v.push_back(child2[j]);
-      	      k++;
-      	    }
-          else
-            break;
-        }
-      // cout << "\t\tla"<< endl;
-      i--;
-      fragmento.push_back(v);
-    }
+   int inverte;
+	int proxFragmento;
+	while(fragmentoIni.size() > 1)
+	{
+		double min = infinito, custo;
+      int tmpInv;
+	
+      //Verificando quem tem menor custo
+      for(unsigned i = 1; i < fragmentoIni.size(); i++)
+		{
+			g1 = fragmentoFim[0];
+			g2 = fragmentoIni[i];
+			double custo1 = VP_Mapa->get_distancia(g1->ori, g2->dest);
+			g2 = fragmentoFim[i];
+			double custo2 = VP_Mapa->get_distancia(g1->ori, g2->dest);
 
-  if(fragmento[0].size() == child1.size())
-    return true;
+         if(custo1 <= custo2)
+			{
+				tmpInv = 0;
+            custo = custo1;
+			}
+         else
+         {
+				tmpInv = 1;
+				custo = custo2;
+         }
 
-  // for(int i = 0; i < fragmento.size(); i++)
-  //   {
-  //     for(int j = 0; j < fragmento[i].size(); j++)
-  // 	cout << fragmento[i][j] << " ";
-  //     cout << " - ";
-  //   }
-  // cout << endl;
+         if(custo < min)
+         {
+				min = custo;
+            inverte = tmpInv;
+            proxFragmento = i;
+			}
+		}
 
-  unsigned frag = rnd(0, fragmento.size() - 1);
-  unsigned begin;
-  if(fragmento[frag].size() == 1)
-    begin =  0;
-  else
-    begin =  rnd(0, 1) ? fragmento[frag].size() - 1 : 0;
+		g1 = fragmentoFim[0];
+		g2 = fragmentoIni[proxFragmento];
+		
+		int ini1 = g1->i + 1;
+		int tam1 = 0;
+		int ini2 = g2->i;
+		
+		g2 = fragmentoFim[proxFragmento];		
+		int tam2 = g2->i - ini2 + 1;
 
+      if(inverte) tam2 *= -1;
+		
+		filho1->troca_sub(ini1, tam1, ini2, tam2);
+		
+		if (inverte) fragmentoFim[0] = fragmentoIni[proxFragmento];
+		else         fragmentoFim[0] = fragmentoFim[proxFragmento];
 
-  vector<unsigned> childAux;
+      fragmentoIni.erase(fragmentoIni.begin() + proxFragmento);
+		fragmentoFim.erase(fragmentoFim.begin() + proxFragmento);
+	}
 
-  if(begin == 0)
-    for(int i = 0; i < fragmento[frag].size(); i++)
-      childAux.push_back(fragmento[frag][i]);
-  else
-    for(int i = begin; i >= 0; i--)
-      childAux.push_back(fragmento[frag][i]);
-
-  int k = fragmento[frag].size() - 1;
-
-  // cout << fragmento[frag][k] << endl;
-  fragmento[frag].clear();
-  fragmento.erase(fragmento.begin() + frag);
-
-  while(fragmento.size() > 0)
-    {
-      int min = Infinite, costo;
-
-      // cout << "\t " << k << endl;
-      for(int i = 0; i < fragmento.size(); i++)
-        {
-          int posicion = 0;
-          if(fragmento[i].size() == 1)
-            {
-              // cout << "k = " << k << endl;
-              // cout << "ChA.size = " << childAux.size() << endl;
-              // cout << "ChA = " << childAux[k] << endl;
-              costo = tsp1->distancia2Ciudades(childAux[k], fragmento[i][0]);
-            }
-          else if(fragmento[i].size() > 1)
-            {
-              int last = fragmento[i].size() - 1;
-              int costo1 = tsp1->distancia2Ciudades(childAux[k], fragmento[i][0]);
-              int costo2 = tsp1->distancia2Ciudades(childAux[k], fragmento[i][last]);
-              if(costo1 < costo2)
-                costo = costo1;
-              else
-                {
-                  costo = costo2;
-                  posicion = fragmento[i].size() - 1;
-                }
-            }
-          else
-            exit(0);
-          if(costo < min)
-            {
-              min = costo;
-              frag = i;
-              begin = posicion;
-            }
-        }
-      // cout << "\t\t"<< begin << " "<< fragmento[frag].size() << " "<< fragmento[frag][begin] << endl;
-      // cout <<"\t\t"<< fragmento[frag].size() << endl;
-      if(begin == 0)
-        for(int i = 0; i < fragmento[frag].size(); i++)
-          childAux.push_back(fragmento[frag][i]);
-      else
-        for(int i = begin; i >= 0; i--)
-          {
-            childAux.push_back(fragmento[frag][i]);
-            // cout << fragmento[frag][i] << endl;
-          }
-      k += fragmento[frag].size();
-
-      fragmento[frag].clear();
-      fragmento.erase(fragmento.begin() + frag);
-    }
-
-  // cout << endl;
-  // for(int i = 0; i < childAux.size(); i++)
-  //   cout << childAux[i] << " ";
-  // cout << endl;
-  // exit(0);
-  // child1.clear();
-  child1 = childAux;
-
-  return true;
+   fragmentoIni.clear();
+	fragmentoFim.clear();
+	
+	return filhos;
 }
 
 /**
@@ -654,56 +679,106 @@ bool Crossover::DPX(vector <unsigned> &child1, vector <unsigned> child2, TSP *ts
  * Computing 7, 1 (January 1997), 19-34.
  *
  **/
-bool Crossover::AP(vector <unsigned> &child1, vector <unsigned> &child2)
+vector <TIndividuo *>TCruzamento::AP(TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
-  if(child1 == child2)
-    return true;
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	TIndividuo *filho2 = parceiro2->clona();
+	
+	filhos.push_back(filho1);
+	filhos.push_back(filho2);
+	
+	int iParc1 = 1;
+	int iParc2 = 1;
+   int iFilho1 = 1;
+	int iFilho2 = 1;
+	TGene *tmp;
+	
+	//Tratando o filho 1
+   for(int i = 1; i < 2*parceiro1->get_qtdeGenes(); i++)
+	{
+		if(i%2)
+		{
+			if (iParc2>=parceiro2->get_qtdeGenes()) continue;
+			//Buscando no parceito 2
+			tmp = parceiro2->get_por_indice(iParc2);
+			//Verificando no filho
+			tmp = filho1->get_por_id(tmp->id);
 
-  vector<unsigned> child1Aux = child1;
-  vector<unsigned> child2Aux = child2;
-
-  child1.clear();
-  child2.clear();
-  //child1
-  child1.push_back(child1Aux[0]);
-  for(int i = 1, j = 0, k = 1; k < 2*child1Aux.size(); k++)
-    {
-      if(k%2 == 0)
-        {
-          int found = child1Aux[i];
-          if(find(child1.begin(), child1.end(), found) == child1.end())
-            child1.push_back(found);
-          i++;
-        }
+			//Verificando se o Gene já foi incluido
+			if (tmp->i == iFilho1) iFilho1++; //Ja está na posição
+      	else if (tmp->i > iFilho1) //Ainda não está na posição correta
+			{
+				filho1->troca_indice(iFilho1, tmp->i);
+				iFilho1++;
+			}
+			
+			iParc2++;
+		}
       else
-        {
-          int found = child2Aux[j];
-          if(find(child1.begin(), child1.end(), found) == child1.end())
-            child1.push_back(found);
-          j++;
-        }
-    }
-  //child2
-  child2.push_back(child2Aux[0]);
-  for(int i = 1, j = 0, k = 1; k < 2*child2Aux.size(); k++)
-    {
-      if(k%2 == 0)
-        {
-          int found = child2Aux[i];
-          if(find(child2.begin(), child2.end(), found) == child2.end())
-            child2.push_back(found);
-          i++;
-        }
-      else
-        {
-          int found = child1Aux[j];
-          if(find(child2.begin(), child2.end(), found) == child2.end())
-            child2.push_back(found);
-          j++;
-        }
-    }
+      {
+			if (iParc1>=parceiro1->get_qtdeGenes()) continue;
+			//Buscando no parceito 2
+			tmp = parceiro1->get_por_indice(iParc1);
+			//Verificando no filho
+			tmp = filho1->get_por_id(tmp->id);
+			
+			//Verificando se o Gene já foi incluido
+			if (tmp->i == iFilho1) iFilho1++; //Ja está na posição
+      	else if (tmp->i > iFilho1) //Ainda não está na posição correta
+			{
+				filho1->troca_indice(iFilho1, tmp->i);
+				iFilho1++;
+			}
+			
+			iParc1++;
+      }
+	}
 
-  return true;
+	//Tratando o filho 2	
+	iParc1 = 1;
+	iParc2 = 1;
+   for(int i = 1; i < 2*parceiro2->get_qtdeGenes(); i++)
+	{
+		if(i%2)
+		{
+			if (iParc1>=parceiro1->get_qtdeGenes()) continue;
+			//Buscando no parceito 2
+			tmp = parceiro1->get_por_indice(iParc1);
+			//Verificando no filho
+			tmp = filho2->get_por_id(tmp->id);
+			
+			//Verificando se o Gene já foi incluido
+			if (tmp->i == iFilho2) iFilho2++; //Ja está na posição
+      	else if (tmp->i > iFilho2) //Ainda não está na posição correta
+			{
+				filho2->troca_indice(iFilho2, tmp->i);
+				iFilho2++;
+			}
+			
+			iParc1++;
+		}
+      else
+      {
+			if (iParc2>=parceiro2->get_qtdeGenes()) continue;
+			//Buscando no parceito 2
+			tmp = parceiro2->get_por_indice(iParc2);
+			//Verificando no filho
+			tmp = filho2->get_por_id(tmp->id);
+			
+			//Verificando se o Gene já foi incluido
+			if (tmp->i == iFilho2) iFilho2++; //Ja está na posição
+      	else if (tmp->i > iFilho2) //Ainda não está na posição correta
+			{
+				filho2->troca_indice(iFilho2, tmp->i);
+				iFilho2++;
+			}
+			
+			iParc2++;
+      }
+	}
+
+  return filhos;
 }
 
 /**
@@ -719,60 +794,66 @@ bool Crossover::AP(vector <unsigned> &child1, vector <unsigned> &child2)
  * Berlin Heidelberg.
  *
  **/
-bool Crossover::MPX(vector <unsigned> &child1, vector <unsigned> child2)
+vector <TIndividuo *>TCruzamento::MPX(TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
-  int begin, end;
-  int Lmin, Lmax;
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	
+	filhos.push_back(filho1);
+	
+	int begin, end;
+	int Lmin, Lmax;
 
-  if(child1.size() <= 30)
-    {
-      Lmax = child1.size()/2;
-      Lmin = rnd(1, Lmax-1);
-    }
-  else
-    {
-      Lmax = child1.size()/2;
-      Lmin = 10;
-    }
+	Lmax = filho1->get_qtdeGenes()/2;
 
-  do {
-    begin = rnd(0, sizeChrm - 2);
-    end = rnd(begin + 1, sizeChrm - 1);
-  }
-  while((end - begin < Lmin) || (end - begin > Lmax));
+	if(filho1->get_qtdeGenes() <= 30) Lmin = TUtils::rnd(1, Lmax-1);
+	else                              Lmin = 10;
 
+	do 
+	{
+		begin = TUtils::rnd(1, filho1->get_qtdeGenes() - 2);
+		end   = TUtils::rnd(begin + 1, filho1->get_qtdeGenes() - 1);
+	}
+	while((end - begin < Lmin) || (end - begin > Lmax));
 
-  vector<unsigned> child1Aux = child1;
-  vector<unsigned> child2Aux = child2;
+   TGene *tmp;
+	int index = 0;
+   for (int i = 1; i < filho1->get_qtdeGenes(); i++)
+	{
+		//Primeiro, copia o bloco de parcero2 para o início do filho
+	   if (begin <= end)	
+		{
+			//Quem é o indice no parceiro 2
+			tmp = parceiro2->get_por_indice(begin);
+			//Pegando o gene no filho
+			tmp = filho1->get_por_id(tmp->id);
+			filho1->troca_indice(i, tmp->i);
+			begin++;
+		}
+		else  //pós preecher o início
+		{
+			do
+			{
+				index++;	
+				
+				//Não tem mais nada para ser posicionado
+				if (index >= parceiro1->get_qtdeGenes()) break;
+				
+   			//Quem é o indice no parceiro 1
+				tmp = parceiro1->get_por_indice(index);
+				
+				//Verficando se já está na posição correta, no filho
+				tmp = filho1->get_por_id(tmp->id);
+			}while (tmp->i < i);
+			
+			//Não tem mais nada para ser posicionado
+			if (index >= parceiro1->get_qtdeGenes()) break;
 
-  // Primer Hijo
-  child1.swap(child2);
-
-  for(int i = 0; i < child1.size(); i++)
-    {
-      if(find(child1Aux.begin() + begin, child1Aux.begin() + end, child1[i]) != (child1Aux.begin() + end))
-        {
-          child1.erase(child1.begin() + i);
-          i--;
-        }
-    }
-  child1.insert(child1.begin(), child1Aux.begin() + begin, child1Aux.begin() + end);
-
-
-  //Segundo Hijo
-  child2.swap(child1Aux);
-  for(int i = 0; i < child2.size(); i++)
-    {
-      if(find(child2Aux.begin() + begin, child2Aux.begin() + end, child2[i]) != (child2Aux.begin() + end))
-        {
-          child2.erase(child2.begin() + i);
-          i--;
-        }
-    }
-  child2.insert(child2.begin(), child2Aux.begin() + begin, child2Aux.begin() + end);
-
-  return true;
-
+			filho1->troca_indice(i, tmp->i);
+		}		
+	}
+	
+  return filhos;
 }
 
 /**
@@ -785,115 +866,115 @@ bool Crossover::MPX(vector <unsigned> &child1, vector <unsigned> child2)
  * 160–165. Hillsdale, New Jersey: Lawrence Erlbaum.
  *
  **/
-bool Crossover::HX(vector <unsigned> &child1, vector <unsigned> child2, TSP *tsp1)
+vector <TIndividuo *>TCruzamento::HX(TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
-  int i = rnd(0, sizeChrm - 1);
-  int found = child1[i];
-  int Imas1, Imenos1, Jmas1, Jmenos1, j;
-  vector<unsigned> child1Aux = child1;
-  vector<unsigned> child2Aux = child2;
-  vector<int> d(4);
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	
+	filhos.push_back(filho1);
 
-  set <int> city(child1.begin(), child1.end());
-  child1.clear();
-  child1.push_back(child1Aux[i]);
-  city.erase(city.find(found));
+	int i = TUtils::rnd(1, parceiro1->get_qtdeGenes() - 1);
+	TGene *g = filho1->get_por_indice(i);
+	TGene *found = parceiro1->get_por_id(g->id);
 
-  while(child1.size() != child1Aux.size() - 1)
-    {
-      d[0] = d[1] = d[2] = d[3] = Infinite;
-      Imas1 = (i == child1Aux.size() - 1) ? 0 : i + 1;
-      Imenos1 = (i == 0) ? child1Aux.size() - 1: i - 1;
+	TGene *gTmp;
 
-      if(child1.size() < (child1Aux.size() / 2))
-        {
-          if(child1.size() == 1 || find(child1.begin(), child1.end(), child1Aux[Imas1]) == child1.end())
-            d[0] = tsp1->distancia2Ciudades(found, child1Aux[Imas1]);
+	double custo;
+	double min;
+   TGene *proxG;
 
-          if(child1.size() == 1 || find(child1.begin(), child1.end(), child1Aux[Imenos1]) == child1.end())
-            d[1] = tsp1->distancia2Ciudades(found, child1Aux[Imenos1]);
+	//Obs.: por causa da forma que o indivíduo é tratado, tendo 0
+	//sempre como a cidade inical, será necessário uma adequação.
+	//O processo se fará até que encontre o zero. Então, o bloco
+	//será movido para o final
+	int ini = 1;
+	int fim = filho1->get_qtdeGenes();
+   filho1->troca_indice(ini, i);
 
-          j = find(child2Aux.begin(), child2Aux.end(), found) - child2Aux.begin();
-          Jmas1 = (j == child2Aux.size() - 1) ? 0 : j + 1;
-          Jmenos1 = (j == 0) ? child2Aux.size() - 1: j - 1;
+	while(ini < fim-1)
+   {
+      min = infinito;
 
-          if(find(child1.begin(), child1.end(), child2Aux[Jmas1]) == child1.end())
-            if(child2Aux[Jmas1] != child1Aux[Imas1] && child2Aux[Jmas1] != child1Aux[Imenos1])
-              d[2] = tsp1->distancia2Ciudades(child2Aux[j], child2Aux[Jmas1]);
+      //Verificando os vizinhos do gene em parente 1
+		
+		//se ainda não foi posicionado	
+      gTmp = filho1->get_por_id(found->prox->id);	
+		if ((gTmp->i > ini && gTmp->i < fim) || (gTmp->i==0 && fim == filho1->get_qtdeGenes()))
+		{
+		   custo = VP_Mapa->get_distancia(found->ori, found->prox->dest);
+			if (custo < min)
+			{
+				min = custo;
+				proxG = gTmp;
+			}
+		}
+		
+		//se ainda não foi posicionado		
+      gTmp = filho1->get_por_id(found->ant->id);
+		if ((gTmp->i > ini && gTmp->i < fim) || (gTmp->i==0 && fim == filho1->get_qtdeGenes()))
+		{
+		   custo = VP_Mapa->get_distancia(found->ori, found->ant->dest);
+			if (custo < min)
+			{
+				min = custo;
+				proxG = gTmp;
+			}
+		}
 
-          if(find(child1.begin(), child1.end(), child2Aux[Jmenos1]) == child1.end())
-            if(child2Aux[Jmenos1] != child1Aux[Imas1] && child2Aux[Jmenos1] != child1Aux[Imenos1])
-              d[3] = tsp1->distancia2Ciudades(child2Aux[j], child2Aux[Jmenos1]);
-        }
-      else
-        {
-          if(child1.size() == 1 || city.find(child1Aux[Imas1]) != city.end())
-            d[0] = tsp1->distancia2Ciudades(found, child1Aux[Imas1]);
+      //Verificando os vizinhos do gene em parente 2
+		found = parceiro2->get_por_id(g->id);
+			
+		//se ainda não foi posicionado		
+      gTmp = filho1->get_por_id(found->prox->id);
+		if ((gTmp->i > ini && gTmp->i < fim) || (gTmp->i==0 && fim == filho1->get_qtdeGenes()))
+		{
+		   custo = VP_Mapa->get_distancia(found->ori, found->prox->dest);
+			if (custo < min)
+			{
+				min = custo;
+				proxG = gTmp;
+			}
+		}
 
-          if(child1.size() == 1 || city.find(child1Aux[Imenos1]) != city.end())
-            d[1] = tsp1->distancia2Ciudades(found, child1Aux[Imenos1]);
+		//se ainda não foi posicionado		
+      gTmp = filho1->get_por_id(found->ant->id);	
+		if ((gTmp->i > ini && gTmp->i < fim) || (gTmp->i==0 && fim == filho1->get_qtdeGenes()))
+		{
+		   custo = VP_Mapa->get_distancia(found->ori, found->ant->dest);     		
+			if (custo < min)
+			{
+				min = custo;
+				proxG = gTmp;
+			}
+		}
 
-          j = find(child2Aux.begin(), child2Aux.end(), found) - child2Aux.begin();
-          Jmas1 = (j == child2Aux.size() - 1) ? 0 : j + 1;
-          Jmenos1 = (j == 0) ? child2Aux.size() - 1: j - 1;
+		//se nenhuma cidade esta disponível, sorteio
+		if(min == infinito)
+		{
+         i = TUtils::rnd(ini+1, fim-1);
+			proxG = filho1->get_por_indice(i);
+		}
+		
+		//Tratando específicamente quando é o gene 0
+		if (proxG->id == 0)
+		{
+			//Movo todo o bloco que já fo montado para o fim
+			i = g->i;
+			filho1->troca_sub(1, g->i, fim, 0);
+			fim = fim - i;
+			g = filho1->get_ini();
+		}
+		else
+		{
+			filho1->troca(g->prox->id, proxG->id);
+   		g = g->prox;
+		}
+		
+		found = parceiro1->get_por_id(g->id);
+		ini = g->i;
+	}
 
-          if(city.find(child2Aux[Jmas1]) != city.end())
-            if(child2Aux[Jmas1] != child1Aux[Imas1] && child2Aux[Jmas1] != child1Aux[Imenos1])
-              d[2] = tsp1->distancia2Ciudades(child2Aux[j], child2Aux[Jmas1]);
-
-          if(city.find(child2Aux[Jmenos1]) != city.end())
-            if(child2Aux[Jmenos1] != child1Aux[Imas1] && child2Aux[Jmenos1] != child1Aux[Imenos1])
-              d[3] = tsp1->distancia2Ciudades(child2Aux[j], child2Aux[Jmenos1]);
-        }
-      int indice = 0, ind;
-      int min = d[0];
-      for(int k = 1; k < 4; k++)
-        {
-          if(min > d[k])
-            {
-              min = d[k];
-              indice = k;
-            }
-        }
-
-      if(indice == 0)
-        ind = Imas1;
-      else if(indice == 1)
-        ind = Imenos1;
-      else if(indice == 2)
-        ind = Jmas1;
-      else
-        ind = Jmenos1;
-
-      if(min == Infinite)
-      	{
-          int rand = rnd(1, city.size());
-          int value;
-          set<int>::iterator it = city.begin();
-          for(int k = 0; k < rand; k++, ++it)
-            value = *it;
-
-          child1.push_back(value);
-          city.erase(city.find(value));
-        }
-      else if(indice == 0 || indice == 1)
-        {
-          child1.push_back(child1Aux[ind]);
-          city.erase(city.find(child1Aux[ind]));
-        }
-      else
-        {
-          child1.push_back(child2Aux[ind]);
-          city.erase(city.find(child2Aux[ind]));
-        }
-
-      found = child1[child1.size() - 1];
-      i = find(child1Aux.begin(), child1Aux.end(), found) - child1Aux.begin();
-    }
-
-  child1.push_back(*city.begin());
-
-  return true;
+	return filhos;
 }
 
 /**
@@ -906,64 +987,59 @@ bool Crossover::HX(vector <unsigned> &child1, vector <unsigned> child2, TSP *tsp
  * Heidelberg.
  *
  **/
-bool Crossover::IO(vector <unsigned> &child1, individuos *pop, TSP *tsp1)
+vector <TIndividuo *>TCruzamento::IO(TIndividuo *parceiro1, TPopulacao *populacao)
 {
-  int c_prim, c, k, i, j; // c[i] & c_prim[j]
-  float Prd = 0.02;
-  i = rnd(0, sizeChrm - 1);
-  c = child1[i];
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	
+	float Prd = 0.02;
+	
+	int i = TUtils::rnd(1, parceiro1->get_qtdeGenes()-1);
+	int j;
+	TGene *c = filho1->get_por_indice(i);
+	TGene *c_prim;
+	
+	while (true)
+	{
+		if(TUtils::flip(Prd))
+		{
+			do 
+			{
+            j = TUtils::rnd(1, filho1->get_qtdeGenes()-1);
+            c_prim = filho1->get_por_indice(j);
+			}
+         while(c_prim->id == c->id);
+		}
+		else
+		{
+			j = TUtils::rnd(0, populacao->get_qtdeIndividuo()-1);
+			TIndividuo *indSelect = populacao->get_individuo(j);
+			c_prim = indSelect->get_por_id(c->id);
+			c_prim = c_prim->prox;
+         c_prim = filho1->get_por_id(c_prim->id);
+			j = c_prim->i;
+		}
+		
+		if ((c->prox->i == c_prim->i) || (c->ant->i == c_prim->i))
+			break;
 
-  vector<unsigned> aux = child1;
-  int actual = tsp1->evaluar(child1);
-  while(true)
-    {
-      if(flip(Prd))
-        {
-          do {
-            j = rnd(0, sizeChrm - 1);
-            c_prim = child1[j];
-          }
-          while(c_prim == c);
-        }
-      else
-        {
-          do {
-            j = rnd(0, sizePop - 1);
-            k = find(pop[j].chrm.begin(), pop[j].chrm.end(), c) - pop[j].chrm.begin();
-
-            c_prim = (k == sizeChrm - 1) ? pop[j].chrm[0] : pop[j].chrm[k + 1];
-            j = find(child1.begin(), child1.end(), c_prim) - child1.begin();
-          }
-          while(c_prim == c);
-        }
-
-      int Imas1 = (i == sizeChrm - 1) ? 0 : i + 1;
-      int Imenos1 = (i == 0) ? sizeChrm - 1 : i - 1;
-      if(child1[Imas1] == c_prim || child1[Imenos1] == c_prim)
-        break;
-      else
-        {
-          if(i > j)
-            {
-              reverse(child1.begin() + j, child1.begin() + i);
-              j = i - 1;
-            }
-          else
-            {
-              reverse(child1.begin() + i + 1, child1.begin() + j + 1);
-              j = i + 1;
-            }
-        }
-      c = c_prim;
-      i = j;
-    }
-
-  if(actual < tsp1->evaluar(child1))
-    child1 = aux;
-
-  return true;
+      
+		if(i > j) filho1->inverte_sub(c->ant, c_prim);
+      else      filho1->inverte_sub(c->prox, c_prim);
+      
+		c = c_prim;
+		i = c->i;
+	}
+	
+	if(parceiro1->get_distancia() < filho1->get_distancia())
+	{
+		delete filho1;
+		filho1 = parceiro1->clona();		
+	}
+	
+	filhos.push_back(filho1);
+	return filhos;
 }
-
 
 /**
  *
@@ -976,83 +1052,85 @@ bool Crossover::IO(vector <unsigned> &child1, individuos *pop, TSP *tsp1)
  * pp. 17–23). Springer Berlin Heidelberg.
  *
  **/
-bool Crossover::MIO(vector <unsigned> &child1, individuos *pop, TSP *tsp1, int maxgen, int gen)
+vector <TIndividuo *>TCruzamento::MIO (TIndividuo *parceiro1, TPopulacao *populacao, int maxGeracao, int geracao)
 {
-  int c_prim, c, k, i, j, temp; // c[i] & c_prim[j]
-  float Prd = 0.02, PUCmax = 0.5, PUCmin = 0.2, Puc;
-  int cantVecinos = 5;
-  i = rnd(0, sizeChrm - 1);
-  c = child1[i];
-  vector<unsigned> aux = child1;
-  int actual = tsp1->evaluar(child1);
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
 
-  while(true)
-    {
-      if(flip(Prd))
-        {
-          vector<pair <int, int> > vecino;
-          for(int ii = 0; ii < sizeChrm; ii++)
-            if(c != ii)
-              {
-                pair <int, int> city (ii, tsp1->distancia2Ciudades(c, ii));
-                vecino.push_back(city);
-              }
-          sort (vecino.begin(), vecino.end(), compare_pair_second<std::less>());
+	float Prd = 0.02, PUCmax = 0.5, PUCmin = 0.2, Puc;
+	int i = TUtils::rnd(1, parceiro1->get_qtdeGenes()-1);
+	int j;
+	unsigned qtdeMelhores = 5;
+	TGene *c = filho1->get_por_indice(i);
+	TGene *c_prim;
+	
+	while (true)
+	{
+		if(TUtils::flip(Prd))
+		{
+			vector<pair <int, double> > custos;
+			for (int ii=1; ii<filho1->get_qtdeGenes(); ii++)
+			{
+				if (ii==c->i) continue;
+				c_prim = filho1->get_por_indice(ii);
+				VP_Mapa->get_distancia(c->ori, c_prim->dest);
+				pair <int, double> custo (ii, VP_Mapa->get_distancia(c->ori, c_prim->dest));
+				custos.push_back(custo);					
+			}		
+			sort (custos.begin(), custos.end(), compare_pair_second<std::less>());
+							 
+			j = TUtils::rnd(0, (custos.size()>qtdeMelhores)?qtdeMelhores-1:custos.size()-1);
+			j = custos[j].first;
+			c_prim = filho1->get_por_indice(j);
+			
+			custos.clear();
+		}
+		else
+		{
+			j = TUtils::rnd(0, populacao->get_qtdeIndividuo()-1);
+			TIndividuo *indSelect = populacao->get_individuo(j);
+			c_prim = indSelect->get_por_id(c->id);
+			c_prim = c_prim->prox;
+         c_prim = filho1->get_por_id(c_prim->id);
+			j = c_prim->i;
+		}
+		
+		if ((c->prox->i == c_prim->i) || (c->ant->i == c_prim->i))
+			break;
 
-          do {
-            j = rnd(0, cantVecinos - 1);
-            c_prim = vecino[j].first;
-          }
-          while(c_prim == c);
-        }
-      else
-        {
-          do {
-            j = rnd(0, sizePop - 1);
-            k = find(pop[j].chrm.begin(), pop[j].chrm.end(), c) - pop[j].chrm.begin();
-            c_prim = (k == sizeChrm - 1) ? pop[j].chrm[0] : pop[j].chrm[k + 1];
-            j = find(child1.begin(), child1.end(), c_prim) - child1.begin();
-          }
-          while(c_prim == c);
-        }
+      
+		if(i > j)
+		{
+			int largo = filho1->get_qtdeGenes() - i + j, kkk, jjj;
+			for(int kk = i + 1, r = 0, jj = j; r < (largo/2); r++, jj--, kk++)
+			{
+				if(jj == -1) jj = filho1->get_qtdeGenes() - 1;
+				kkk = kk % filho1->get_qtdeGenes();
+				jjj = jj % filho1->get_qtdeGenes();
 
-      int Imas1 = (i == sizeChrm - 1) ? 0 : i + 1;
-      int Imenos1 = (i == 0) ? sizeChrm - 1: i - 1;
-      if(child1[Imas1] == c_prim || child1[Imenos1] == c_prim)
-        break;
-      else
-        {
-          if(i > j)
-            {
-              int largo = child1.size() - i + j, kkk, jjj;
-              for(int kk = i + 1, r = 0, jj = j; r < (largo/2); r++, jj--, kk++)
-                {
-                  if(jj == -1)
-                    jj = sizeChrm - 1;
-                  kkk = kk % sizeChrm;
-                  jjj = jj % sizeChrm;
-                  temp = child1[kkk];
-                  child1[kkk] = child1[jjj];
-                  child1[jjj] = temp;
-                }
-            }
-          else
-            reverse(child1.begin() + i + 1, child1.begin() + j + 1);
-        }
+				filho1->troca_indice (kkk, jjj);
+			}
+		}
+      else      
+			filho1->inverte_sub(c->prox, c_prim);
 
-      Puc = PUCmax * exp((log(PUCmin / PUCmax)/maxgen)*gen);
-      if(flip(Puc))
-      	{
-      	  c = c_prim;
-      	  i++;
-      	  i = i % sizeChrm;
-      	}
-    }
-
-  if(actual < tsp1->evaluar(child1))
-    child1 = aux;
-
-  return true;
+      Puc = PUCmax * exp((log(PUCmin / PUCmax)/maxGeracao)*geracao);
+      if(TUtils::flip(Puc))
+		{
+			c = c_prim;
+      }
+		
+		i = c->i;
+	}
+	
+	if(parceiro1->get_distancia() < filho1->get_distancia())
+	{
+		delete filho1;
+		filho1 = parceiro1->clona();		
+	}
+	
+	filhos.push_back(filho1);
+	return filhos;
 }
 
 /**
@@ -1065,93 +1143,65 @@ bool Crossover::MIO(vector <unsigned> &child1, individuos *pop, TSP *tsp1, int m
  * Morgan Kaufmann Publishers.
  *
  **/
-bool Crossover::VR(vector <unsigned> &child1, vector <unsigned> child2, individuos *pop)
+vector <TIndividuo *>TCruzamento::VR (TIndividuo *parceiro1, TIndividuo *parceiro2, TPopulacao *populacao)
 {
-  unsigned ch3, ch4, cont = 0, last = sizeChrm + 10;
-  Selection *s = new Selection(sizePop, seed);
-  ch3 = s->TorneoK(pop, 5);
-  ch4 = s->TorneoK(pop, 5);
-  delete s;
-  vector<unsigned> child = child1;
-  vector<unsigned> child3 = pop[ch3].chrm;
-  vector<unsigned> child4 = pop[ch4].chrm;
-  vector<unsigned> random = child1;
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	filho1->embaralha();
 
-  for(int i = 0; i < child.size(); i++)
-    {
-      if(child[i] == child2[i])
-        {
-          if(child[i] != child3[i])
-            {
-              if(child[i] == child4[i])
-                {
-                  random[i] = last;
-                  cont++;
-                }
-              else
-                child1[i] = last;
-            }
-          else
-            {
-              random[i] = last;
-              cont++;
-            }
-        }
-      else if(child[i] == child3[i] && child[i] == child4[i])
-        {
-          random[i] = last;
-          cont++;
-        }
-      else
-        {
-          if(child2[i] == child3[i] && child2[i] == child4[i])
-            {
-              child1[i] = child2[i];
-              int j = find(random.begin(), random.end(), child1[i]) - random.begin();
-              random[j] = last;
-              cont++;
-            }
-          else
-            child1[i] = last;
-        }
-    }
+	TSelecao *selecao = new TSelecao(VP_Mapa, VP_ArqSaida, TSelecao::tipoTorneioK);
+	unsigned p3 = selecao->processa(populacao);
+	unsigned p4 = selecao->processa(populacao);
+	delete selecao;
 
-  if(child1 == child && cont == 0)
-    {
-      int i, j;
-      do {
-        i = rnd(0, sizeChrm - 1);
-        j = rnd(0, sizeChrm - 1);
-      }
-      while(i == j);
+	TIndividuo *parceiro3 = populacao->get_individuo (p3);
+	TIndividuo *parceiro4 = populacao->get_individuo (p4);
 
-      int aux = child1[i];
-      child[i] = child[j];
-      child[j] = aux;
-      return true;
-    }
+   int qtdeIguais;
+	int idGene;
+	TGene *g;
+	for (int i=1; i < filho1->get_qtdeGenes(); i++)
+	{
+		//Verifica se a posição i tem o mesmo gene em pelo menos 3
+		// dos parceiros		
+		g = parceiro1->get_por_indice(i);
+		idGene = g->id;
+		qtdeIguais = 1;
 
-  shuffle(random.begin(), random.end(), generator);
+		g = parceiro2->get_por_indice(i);
+		if (g->id==idGene) qtdeIguais++;
+		
+		g = parceiro3->get_por_indice(i);
+		if (g->id==idGene) qtdeIguais++;
+		
+		g = parceiro4->get_por_indice(i);
+		if (g->id==idGene) qtdeIguais++;
+		
+		if (qtdeIguais<3) 
+		{
+			g = parceiro2->get_por_indice(i);
+			idGene = g->id;
+			qtdeIguais = 1;
 
-  for(int i = 0, j = 0; i < child1.size() && j < random.size();)
-    {
-      if(child1[i] == last)
-        {
-          if(random[j] != last)
-            {
-              child1[i] = random[j];
-              i++;
-              j++;
-            }
-          else
-            j++;
-        }
-      else
-        i++;
-    }
+			g = parceiro3->get_por_indice(i);
+			if (g->id==idGene) qtdeIguais++;
+		
+			g = parceiro4->get_por_indice(i);
+			if (g->id==idGene) qtdeIguais++;			
+		}
+		
+		if (qtdeIguais>=3) 
+		{
+			//Se encontrei um gene na mesma posição em pelomenos 3
+			//parceiros, o filho, nesta posição, terá este gene
+			g = filho1->get_por_indice(i);
+			filho1->troca(g->id, idGene);
+		}
+	}
 
-  return true;
-}
+	filhos.push_back(filho1);
+	return filhos;
+}	
 
 /**
  *
@@ -1168,183 +1218,102 @@ bool Crossover::VR(vector <unsigned> &child1, vector <unsigned> child2, individu
  * Reinhold.
  *
  **/
-bool Crossover::ER(vector <unsigned> &child11, vector <unsigned> child2)
+vector <TIndividuo *>TCruzamento::ER (TIndividuo *parceiro1, TIndividuo *parceiro2)
 {
-  vector< vector<int> > edge(child11.size());
-  int j, Jmas1, Jmenos1, j2, J2mas1, J2menos1, actual;
+	vector <TIndividuo *> filhos;
+	TIndividuo *filho1 = parceiro1->clona();
+	
+	TGene *g;
+	TGene *gTemp;
+	TGene *gVizinho;
+	long custoTemp;
+	
+	int idMelhor;
+	long custoMelhor;
+	
+	for (int i = 0; i < filho1->get_qtdeGenes()-2; i++ )
+	{
+		g = filho1->get_por_indice(i);
+		
+		//Servirá como a parte aleatória a medida que as posições	
+		custoMelhor = VP_Mapa->get_distancia(g->ori, g->prox->dest);
+      idMelhor = g->prox->id;
+      
+		//########################
+		// Parceiro 1
+		//########################
+		//Pegando o mesmo gene no parcero 1
+		gTemp = parceiro1->get_por_id(g->id);
+		
+		//Verificando se o próximo já está no filho
+		//*****************************************
+		gVizinho = filho1->get_por_id(gTemp->prox->id);
+		if (gVizinho->i > i) //ainda não faz parte do filho
+		{
+			//Verifico o custo
+			custoTemp = VP_Mapa->get_distancia(g->ori, gVizinho->dest);
+			//Se tiver melhor custo, é um candidato a substituição
+			if(custoTemp < custoMelhor)
+			{
+				custoMelhor = custoTemp;
+				idMelhor = gVizinho->id;
+			}
+		}
 
-  vector<unsigned> child1 = child11;
-  child11.clear();
+		//Verificando se o anterior já está no filho
+		//*******************************************
+		gVizinho = filho1->get_por_id(gTemp->ant->id);
+		if (gVizinho->i > i) //ainda não faz parte do filho
+		{
+			//Verifico o custo
+			custoTemp = VP_Mapa->get_distancia(g->ori, gVizinho->dest);
+			//Se tiver melhor custo, é um candidato a substituição
+			if(custoTemp < custoMelhor)
+			{
+				custoMelhor = custoTemp;
+				idMelhor = gVizinho->id;
+			}
+		}
 
-  for(int i = 0; i < edge.size(); i++)
-    {
-      j = find(child1.begin(), child1.end(), i) - child1.begin();
-      Jmas1 = (j == sizeChrm - 1) ? 0 : j + 1;
-      Jmenos1 = (j == 0) ? sizeChrm - 1: j - 1;
-      vector<int> v;
-      v.push_back(child1[Jmas1]);
-      v.push_back(child1[Jmenos1]);
+		//########################
+		// Parceiro 2
+		//########################
+		//Pegando o mesmo gene no parcero 2
+		gTemp = parceiro2->get_por_id(g->id);
+		
+		//Verificando se o próximo já está no filho
+		//*****************************************
+		gVizinho = filho1->get_por_id(gTemp->prox->id);
+		if (gVizinho->i > i) //ainda não faz parte do filho
+		{
+			//Verifico o custo
+			custoTemp = VP_Mapa->get_distancia(g->ori, gVizinho->dest);
+			//Se tiver melhor custo, é um candidato a substituição
+			if(custoTemp < custoMelhor)
+			{
+				custoMelhor = custoTemp;
+				idMelhor = gVizinho->id;
+			}
+		}
 
-      j2 = find(child2.begin(), child2.end(), i) - child2.begin();
-      J2mas1 = (j2 == sizeChrm - 1) ? 0 : j2 + 1;
-      J2menos1 = (j2 == 0) ? sizeChrm - 1: j2 - 1;
+		//Verificando se o anterior já está no filho
+		//*******************************************
+		gVizinho = filho1->get_por_id(gTemp->ant->id);
+		if (gVizinho->i > i) //ainda não faz parte do filho
+		{
+			//Verifico o custo
+			custoTemp = VP_Mapa->get_distancia(g->ori, gVizinho->dest);
+			//Se tiver melhor custo, é um candidato a substituição
+			if(custoTemp < custoMelhor)
+			{
+				custoMelhor = custoTemp;
+				idMelhor = gVizinho->id;
+			}
+		}
 
-      if(child2[J2mas1] != child1[Jmas1] && child2[J2mas1] != child1[Jmenos1])
-        v.push_back(child2[J2mas1]);
-      if(child2[J2menos1] != child1[Jmas1] && child2[J2menos1] != child1[Jmenos1])
-        v.push_back(child2[J2menos1]);
+	   filho1->troca (g->prox->id, idMelhor);		
+	}
 
-      edge[i] = v;
-    }
-
-
-  actual = (rnd(0, 1)) ? child1[0] : child2[0];
-  child11.push_back(actual);
-
-  vector<int>::iterator it;
-  int flag = false;
-  for(int k = 0; child11.size() < child1.size(); k++)
-    {
-      for(int i = 0; i < edge.size(); i++)
-        if((it = find(edge[i].begin(), edge[i].end(), actual)) != edge[i].end())
-          edge[i].erase(it);
-
-      if(edge[actual].size() == 0)
-        {
-          vector<int> elegir;
-          for(int i = 0; i < edge.size(); i++)
-            if(edge[i].size() != 0)
-              elegir.push_back(edge[i][0]);
-
-          if(elegir.size() == 0)
-            break;
-
-          shuffle(elegir.begin(), elegir.end(), generator);
-          actual = elegir[0];
-          child11.push_back(actual);
-        }
-      else
-        {
-          int min = 10, tam, randomMax = 0, random, revisar = actual, cand;
-          flag = false;
-          for(int i = 0; i < edge[revisar].size(); i++)
-            {
-              tam = edge[edge[revisar][i]].size();
-              if(tam != 0)
-                {
-                  random = rnd(1, 7);
-                  if((tam < min) || (tam == min && randomMax < random))
-                    {
-                      min = tam;
-                      random  = randomMax;
-                      cand = edge[revisar][i];
-                      flag = true;
-                    }
-                }
-            }
-          if(flag == true)
-            {
-              actual = cand;
-              child11.push_back(actual);
-            }
-          else
-            {
-              actual = edge[revisar][0];
-              child11.push_back(actual);
-            }
-        }
-    }
-  return true;
-}
-
-
-
-/**
- *
- * Edge Recombination Crossover (ER)
- *
- * Nguyen, Yoshihara, Yamamori & Yasunaga (2002). Greedy genetic algorithms
- * for symmetric and asymmetric TSPs. IPSJ Trans. Mathematical Modeling and
- * Its Applications, 43, 165-175.
- *
- * Sengoku & Yoshihara (1998). A fast TSP solver using GA on JAVA. In Third
- * International Symposium on Artificial Life, and Robotics (AROB III’98)
- * (pp. 283-288).
- *
- **/
-bool Crossover::GSTX(vector <unsigned> &child11, vector <unsigned> child2)
-{
-  vector<unsigned> child1 = child11;
-  vector<unsigned> random = child11;
-  child11.clear();
-  // x de child1 (a) e y de child2 (b)
-  bool Fa = true, Fb = true;
-  int t = rnd(0, sizeChrm - 1);
-
-  int x = find(child1.begin(), child1.end(), t) - child1.begin();
-  int y = find(child2.begin(), child2.end(), t) - child2.begin();
-
-  child11.push_back(t);
-  random.erase(find(random.begin(), random.end(), child1[x]));
-  // for(int i = 0; i < child1.size(); i++)
-  //   cout << child1[i] << " ";
-  // cout << endl;
-
-  // for(int i = 0; i < child2.size(); i++)
-  //   cout << child2[i] << " ";
-  // cout << endl;
-
-  do {
-    x = (x - 1) % sizeChrm;
-    y = (y + 1) % sizeChrm;
-
-    if(Fa)
-      {
-        if(find(child11.begin(), child11.end(), child1[x]) == child11.end())
-          {
-            child11.insert(child11.begin(), child1[x]);
-            random.erase(find(random.begin(), random.end(), child1[x]));
-          }
-        else
-          Fa = false;
-      }
-    if(Fb)
-      {
-        if(find(child11.begin(), child11.end(), child2[y]) == child11.end())
-          {
-            child11.push_back(child2[y]);
-            random.erase(find(random.begin(), random.end(), child2[y]));
-          }
-        else
-          Fb = false;
-      }
-    // cout << " actual ";
-    // for(int j = 0; j < child11.size(); j++)
-    //   cout << child11[j] << " ";
-    // cout << endl;
-  }
-  while(Fa || Fb);
-
-  // for(int i = 0; i < child11.size(); i++)
-  //   cout << child11[i] << " ";
-  // cout << endl;
-
-  if(child11.size() != child1.size())
-    {
-      shuffle(random.begin(), random.end(), generator);
-      for(int i = 0; i < random.size(); i++)
-        {
-          if(rnd(0, 1))
-            child11.insert(child11.begin(), random[i]);
-          else
-            child11.push_back(random[i]);
-        }
-    }
-  // for(int i = 0; i < child11.size(); i++)
-  //   cout << child11[i] << " ";
-  // cout << endl;
-
-  // exit(0);
-
-  return true;
-}
+	filhos.push_back(filho1);
+	return filhos;
+}	
