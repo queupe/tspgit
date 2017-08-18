@@ -677,7 +677,7 @@ int TMutacao::DBM2(TIndividuo *individuo)
 }
 /**
   *SHMO:
-  *  Esse é pesado. Dentro desse O(n^2) aí, ele realiza três testes de troca.
+  *  Esse é um método guloso. Dentro desse O(n^2) aí, ele realiza três testes de troca.
   *  Os testes estão descritos abaixo. Não achei modos de simplificar esse n^2.
   *  
 **/
@@ -712,6 +712,33 @@ int TMutacao::SHMO(TIndividuo *individuo)
   return 1;
 }
 
+/**
+  *NJ:
+  *  Esse é um método guloso também. 
+  *  
+**/
+int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
+{
+  float probabilidade = 0.5;
+  TGene *c, *cLinha;
+  int nMaxVizinhos = 3, nMaxInteracoes = 5, QtdGenes = individuo->get_qtdeGenes();
+  
+
+  for(int interacao=0; interacao<nMaxInteracoes; interacao++)
+  {
+    TIndividuo *tipo1, *tipo2, *tipo3, *tipo4;
+    c = individuo->get_por_indice(TUtils::rnd(1, QtdGenes-2));
+
+    //seleciona cLinha
+    if(TUtils::flip(probabilidade))
+    {
+      
+    }
+  }
+
+
+  return 1;
+}
 
 /*************************
 *  Métodos auxiliares

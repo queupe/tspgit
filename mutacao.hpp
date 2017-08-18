@@ -52,6 +52,7 @@ class TMutacao
       int DBM(TIndividuo *individuo);
       int DBM2(TIndividuo *individuo);
       int SHMO(TIndividuo *individuo);
+      int NJ(TIndividuo *individuo, TPopulacao *populacao);
 	  //Métodos auxiliares
 	  double calcValReverso (TGene *g1, TGene *g2);
 };
