@@ -770,34 +770,25 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
     InsertPoint = GenS->prox;
   }
   opcao->troca_sub(S->prox->i, 0, rProx->i, 1);
-
 }
 
 int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
 {
   float probabilidade = 0.5;
   TGene *c, *cLinha;
-<<<<<<< HEAD
-  
-=======
   TIndividuo *indTemp, **opcoes;
   TMapaGenes *mapaGenes = individuo->getMapa();
->>>>>>> f95386f7a325e8c202d9e80fb2ade0424662f2da
 
   int nMaxVizinhos = 3, nMaxInteracoes = 5, QtdGenes = individuo->get_qtdeGenes(), rndi=-1;
   
   opcoes = (TIndividuo **) malloc(4 * sizeof(TIndividuo*));
   for(int interacao=0; interacao<nMaxInteracoes; interacao++)
   {
-<<<<<<< HEAD
-    TIndividuo *tipo1, *tipo2, *tipo3, *tipo4;
-=======
     //Opções de indivíduos a ser escolhida
     opcoes[0] = individuo->clona();
     opcoes[1] = individuo->clona();
     opcoes[2] = individuo->clona();
     opcoes[3] = individuo->clona();
->>>>>>> f95386f7a325e8c202d9e80fb2ade0424662f2da
 
     //seleciona o gene c.
     c = individuo->get_por_indice(TUtils::rnd(1, QtdGenes-1));
@@ -805,9 +796,6 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
     //seleciona o gene cLinha
     if(TUtils::flip(probabilidade))
     {
-<<<<<<< HEAD
-
-=======
       //pega o proximo gene de um indivíduo randomico na populaçao, sendo c != cLinha.
       do
       {
@@ -820,18 +808,18 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
     else
     {
       //Pega no individuo o id do gene que tem a menor distancia possivel com c dentro do mapa.
-      vector< pair<int, int> > distancias;
+      vector< pair<int, double> > distancias;
       for(int i=1; i<QtdGenes; i++)
       {
         if(i!=c->id)
         {
-          pair<int, int> dist(i, mapaGenes->get_distancia(i, c->id));
+          pair<int, double> dist(i, mapaGenes->get_distancia(i, c->id));
           distancias.push_back(dist);
         }
       }
-      sort(distancias.begin(), distancias.end(), compare_pair_second<std::less>());
+      sort(distancias.begin(), distancias.end(), TUtils::compare_pair_second<int, double, std::less<double>>());
       rndi = TUtils::rnd(0, nMaxVizinhos-1);
-      cLinha = individuo->get_por_id(distancias[rndi].frist);
+      cLinha = individuo->get_por_id(distancias[rndi].first);
     }
     //Se são visinhos, pula a interação;
     if(c->prox == cLinha || c->ant == cLinha) continue;
@@ -844,7 +832,6 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
       if(c->i < cLinha->i) opcoes[1]->inverte_sub_indice(c->i, cLinha->ant->i);
       else opcoes[1]->inverte_sub_indice(cLinha->prox->i, c->i);
       Tipo3(opcoes[2], c, cLinha);
->>>>>>> f95386f7a325e8c202d9e80fb2ade0424662f2da
     }
   }
 
