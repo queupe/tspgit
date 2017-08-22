@@ -15,6 +15,7 @@
 
 #include <vector>
 #include "individuo.hpp"
+#include "populacao.hpp"
 #include "utils.hpp"
 #include "tsp.hpp"
 #include "arqlog.hpp"
@@ -53,8 +54,10 @@ class TMutacao
       int DBM2(TIndividuo *individuo);
       int SHMO(TIndividuo *individuo);
       int NJ(TIndividuo *individuo, TPopulacao *populacao);
+      int TestMutation(TIndividuo *individuo);
 	  //Métodos auxiliares
-	  double calcValReverso (TGene *g1, TGene *g2);
+      double calcValReverso (TGene *g1, TGene *g2);
+      void Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha);
 };
 
 #endif
