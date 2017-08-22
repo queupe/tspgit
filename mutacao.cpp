@@ -721,18 +721,16 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
 {
   float probabilidade = 0.5;
   TGene *c, *cLinha;
-  int nMaxVizinhos = 3, nMaxInteracoes = 5, QtdGenes = individuo->get_qtdeGenes();
   
 
   for(int interacao=0; interacao<nMaxInteracoes; interacao++)
   {
     TIndividuo *tipo1, *tipo2, *tipo3, *tipo4;
-    c = individuo->get_por_indice(TUtils::rnd(1, QtdGenes-2));
 
     //seleciona cLinha
     if(TUtils::flip(probabilidade))
     {
-      
+
     }
   }
 
