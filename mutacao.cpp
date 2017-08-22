@@ -98,6 +98,11 @@ int TMutacao::processa (TIndividuo *individuo)
          return SHMO(individuo);
          break;
       }
+      case 14:
+      {
+         return TestMutation(individuo);
+         break;
+      }
       default:
       {
          break;
@@ -711,28 +716,123 @@ int TMutacao::SHMO(TIndividuo *individuo)
   }
   return 1;
 }
+int TMutacao::TestMutation(TIndividuo *individuo)
+{
+  TGene *p;
+  p = individuo->get_por_indice(2);
+  individuo->troca_sub(2, 2, 4, 2);
+  cout<<p->i<<endl;
 
+  return 1;
+}
 /**
   *NJ:
   *  Esse é um método guloso também. 
   *  
 **/
+void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
+{
+  TGene *PathIni, *PathEnd, *R, *S, *StopPoint, *InsertPoint, *rProx;
+  double ChangedValue, MaxValue = -1 * infinito;
+
+
+  if(c->i < cLinha->i)
+  {
+    PathIni = cLinha->prox;
+    PathEnd = c->ant;
+  }
+  else
+  {
+    PathIni = c->prox;
+    PathEnd = cLinha->ant;
+  }
+
+  for(TGene *GenR = c; GenR != cLinha->prox; GenR = GenR->prox)
+  {
+    for(TGene *GenS = PathIni; GenS != PathEnd->prox; GenS = GenS->prox)
+    {
+      opcao->troca_indice(GenR->i, GenS->i);
+      ChangedValue = opcao->get_distancia();
+      if(ChangedValue > MaxValue)
+      {
+        R = GenR;
+        S = GenS;
+        MaxValue = ChangedValue;
+      }
+    }
+  }
+  StopPoint = PathEnd->prox->prox;
+  InsertPoint = rProx = R->prox;
+  for(TGene *NextGen = PathIni->prox, *GenS = NextGen->ant;
+     NextGen != StopPoint; NextGen = NextGen->prox, GenS = NextGen->ant)
+  {
+    opcao->troca_sub(InsertPoint->i, 0, GenS->i, 1);
+    InsertPoint = GenS->prox;
+  }
+  opcao->troca_sub(S->prox->i, 0, rProx->i, 1);
+
+}
+
 int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
 {
   float probabilidade = 0.5;
   TGene *c, *cLinha;
-  int nMaxVizinhos = 3, nMaxInteracoes = 5, QtdGenes = individuo->get_qtdeGenes();
-  
+  TIndividuo *indTemp, **opcoes;
+  TMapaGenes *mapaGenes = individuo->getMapa();
 
+  int nMaxVizinhos = 3, nMaxInteracoes = 5, QtdGenes = individuo->get_qtdeGenes(), rndi=-1;
+  
+  opcoes = (TIndividuo **) malloc(4 * sizeof(TIndividuo*));
   for(int interacao=0; interacao<nMaxInteracoes; interacao++)
   {
-    TIndividuo *tipo1, *tipo2, *tipo3, *tipo4;
-    c = individuo->get_por_indice(TUtils::rnd(1, QtdGenes-2));
+    //Opções de indivíduos a ser escolhida
+    opcoes[0] = individuo->clona();
+    opcoes[1] = individuo->clona();
+    opcoes[2] = individuo->clona();
+    opcoes[3] = individuo->clona();
 
-    //seleciona cLinha
+    //seleciona o gene c.
+    c = individuo->get_por_indice(TUtils::rnd(1, QtdGenes-1));
+
+    //seleciona o gene cLinha
     if(TUtils::flip(probabilidade))
     {
-      
+      //pega o proximo gene de um indivíduo randomico na populaçao, sendo c != cLinha.
+      do
+      {
+        rndi = TUtils::rnd(0, populacao->get_qtdeIndividuo() -1);
+        indTemp = populacao->get_individuo(rndi);
+        cLinha = indTemp->get_por_id(c->id)->prox;
+      }while (c->id == cLinha->id);
+
+    }
+    else
+    {
+      //Pega no individuo o id do gene que tem a menor distancia possivel com c dentro do mapa.
+      vector< pair<int, int> > distancias;
+      for(int i=1; i<QtdGenes; i++)
+      {
+        if(i!=c->id)
+        {
+          pair<int, int> dist(i, mapaGenes->get_distancia(i, c->id));
+          distancias.push_back(dist);
+        }
+      }
+      sort(distancias.begin(), distancias.end(), compare_pair_second<std::less>());
+      rndi = TUtils::rnd(0, nMaxVizinhos-1);
+      cLinha = individuo->get_por_id(distancias[rndi].frist);
+    }
+    //Se são visinhos, pula a interação;
+    if(c->prox == cLinha || c->ant == cLinha) continue;
+    else
+    {
+      //Opçao 1: o c é fixo.
+      if(c->i < cLinha->i) opcoes[0]->inverte_sub_indice(c->prox->i, cLinha->i);
+      else opcoes[0]->inverte_sub_indice(cLinha->i, c->ant->i);
+      //Opção 2: o cLinha é fixo.
+      if(c->i < cLinha->i) opcoes[1]->inverte_sub_indice(c->i, cLinha->ant->i);
+      else opcoes[1]->inverte_sub_indice(cLinha->prox->i, c->i);
+      Tipo3(opcoes[2], c, cLinha);
     }
   }
 
