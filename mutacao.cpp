@@ -753,6 +753,7 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
     {
       opcao->troca_indice(GenR->i, GenS->i);
       ChangedValue = opcao->get_distancia();
+      opcao->troca_indice(GenR->i, GenS->i);
       if(ChangedValue > MaxValue)
       {
         R = GenR;
@@ -761,15 +762,23 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
       }
     }
   }
-  StopPoint = PathEnd->prox->prox;
+  
   InsertPoint = rProx = R->prox;
-  for(TGene *NextGen = PathIni->prox, *GenS = NextGen->ant;
-     NextGen != StopPoint; NextGen = NextGen->prox, GenS = NextGen->ant)
+  //Basicamente: É pego um gene do caminho a ser transferido e seu sucessor, depois de transferido e seu index alterado no processo, o proximo é 
+  //  pego baseado no Nextgen, que serve como ponteiro para o proximo gene da lista. No caso do tipo 3, é a lista de fora do caminho c.....cLinha.
+  for(TGene *NextGen = PathIni->prox, *GenS = PathIni;
+     GenS != PathEnd->prox; NextGen=NextGen->prox, GenS = NextGen->ant)
   {
     opcao->troca_sub(InsertPoint->i, 0, GenS->i, 1);
     InsertPoint = GenS->prox;
+    //Caso altere...
   }
   opcao->troca_sub(S->prox->i, 0, rProx->i, 1);
+}
+
+void TMutacao::Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha)
+{
+  
 }
 
 int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)

@@ -58,6 +58,7 @@ class TMutacao
 	  //Métodos auxiliares
       double calcValReverso (TGene *g1, TGene *g2);
       void Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha);
+      void Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha);
 };
 
 #endif
