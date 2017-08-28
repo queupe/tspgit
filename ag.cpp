@@ -202,7 +202,7 @@ TPopulacao *TAlgGenetico::iteracao (TPopulacao *populacao, int geracao)
   fazMutacao(novaPop);
 
   novaPop->ordena();
-  
+
   delete populacao;
 
   time(&sysTime2);
