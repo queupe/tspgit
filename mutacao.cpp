@@ -758,6 +758,7 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
   {
     for(TGene *OutGen = OutPathIni; OutGen->i != OutPathEnd->prox->i; OutGen = OutGen->prox)
     {
+      if(InnerGen->i == 0 || OutGen->i == 0) continue;
       opcao->troca_indice(InnerGen->i, OutGen->i);
       ChangedValue = opcao->get_distancia();
       opcao->troca_indice(InnerGen->i, OutGen->i);
@@ -771,6 +772,8 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
   }
   cout<<"Indice de R e S são "<< R->i<<" "<< S->i <<endl;
   InsertionPoint = sNextGen = S->prox;
+  //A posição 0 não pode ser alterada por conversão do autor.
+  if(InsertionPoint->i == 0) InsertionPoint = sNextGen = InsertionPoint->prox;
   cout<<"Indice do ponto de inserção "<< InsertionPoint->i<<endl;
   //Basicamente: É pego um gene do caminho a ser transferido e seu sucessor, depois de transferido e seu index alterado no processo, o proximo é 
   //  pego baseado no Nextgen, que serve como ponteiro para o proximo gene da lista. No caso do tipo 3, é a lista de fora do caminho c.....cLinha.
@@ -783,7 +786,8 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
     cout<<"indice NextGen: "<< NextGen->i<<" ";
     cout<<"indice InnerGen: "<< InnerGen->i<<" ";
     cout<<"Indice InsertionPoint: "<< InsertionPoint->i<<endl;
-    opcao->troca_sub(InsertionPoint->i, 0, InnerGen->i, 1);
+    if(InsertionPoint->i == 0 || InnerGen->i == 0) continue;
+    else opcao->troca_sub(InsertionPoint->i, 0, InnerGen->i, 1);
     InsertionPoint = InnerGen->prox;
     cout<<"opcao depois: "<< opcao->toString()<<endl;
   }
@@ -797,7 +801,7 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
 **/
 void TMutacao::Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha)
 {
-  TGene *InnerPathIni, *InnerPathEnd, *OutPathIni, *OutPathEnd, *R, *S, *InsertionPoint, *sNextGen;
+  TGene *InnerPathIni, *InnerPathEnd, *OutPathIni, *OutPathEnd, *R, *S, *sNextGen;
   double ChangedValue, MaxValue = -1 * infinito;
 
   cout<<"Calculando opcao 4"<<endl;
@@ -826,10 +830,12 @@ void TMutacao::Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha)
     cout<<"OutPathEnd: "<< OutPathEnd->i<<endl;
   }
   cout<<"Escolhendo R e S"<<endl;
+  cout<<"Escolhendo R e S"<<endl;
   for(TGene *InnerGen = InnerPathIni; InnerGen->i != InnerPathEnd->prox->i; InnerGen = InnerGen->prox)
   {
     for(TGene *OutGen = OutPathIni; OutGen->i != OutPathEnd->prox->i; OutGen = OutGen->prox)
     {
+      if(InnerGen->i == 0 || OutGen->i == 0) continue;
       opcao->troca_indice(InnerGen->i, OutGen->i);
       ChangedValue = opcao->get_distancia();
       opcao->troca_indice(InnerGen->i, OutGen->i);
@@ -842,19 +848,29 @@ void TMutacao::Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha)
     }
   }
   cout<<"Indice de R e S são "<< R->i<<" "<< S->i <<endl;
-  InsertionPoint = sNextGen = S->prox;
-  cout<<"Indice do ponto de inserção "<< InsertionPoint->i<<endl;
+  sNextGen = S->prox;
+  //A posição 0 não pode ser alterada por conversão do autor.
+  if(sNextGen->i == 0) sNextGen = sNextGen->prox;
   //Basicamente: É pego um gene do caminho a ser transferido e seu sucessor, depois de transferido e seu index alterado no processo, o proximo é 
   //  pego baseado no Nextgen, que serve como ponteiro para o proximo gene da lista. No caso do tipo 3, é a lista de fora do caminho c.....cLinha.
   cout<<"Inserindo caminho de dentro no de fora."<<endl;
-  cout<<"Individuo atual: "<< opcao->toString()<<endl;
-  for(TGene *NextGen = InnerPathIni->prox, *InnerGen = InnerPathIni;
-     InnerGen->i != InnerPathEnd->prox->i; NextGen=NextGen->prox, InnerGen = NextGen->ant)
+  cout<<"opcao velha: "<< opcao->toString()<<endl;
+  for(TGene *NextGen = InnerPathIni->prox, *InnerGen = InnerPathIni, *InsertionPoint = S->prox;
+      InnerGen->i != InnerPathEnd->prox->i;
+      NextGen=NextGen->prox, InnerGen = NextGen->ant
+     )
   {
+    cout<<"indice NextGen: "<< NextGen->i<<" ";
+    cout<<"indice InnerGen: "<< InnerGen->i<<" ";
+    cout<<"Indice InsertionPoint: "<< InsertionPoint->i<<endl;
+    cout<<"opcao atual:/t"<< opcao->toString()<<endl;
+    if(InsertionPoint->i == 0) InsertionPoint = InsertionPoint->prox;
+    if(InnerGen->i == 0) InnerGen = InnerGen->prox;
     opcao->troca_sub(InsertionPoint->i, 0, InnerGen->i, 1);
     InsertionPoint = InnerGen->prox;
+    cout<<"opcao depois:/t"<< opcao->toString()<<endl;
   }
-  cout<<"Novo individuo: "<< opcao->toString()<<endl;
+  cout<<"Nova opcao: "<< opcao->toString()<<endl;
   opcao->troca_sub(R->prox->i, 0, sNextGen->i, 1);
 }
 
@@ -884,10 +900,10 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
     opcoes[2] = individuo->clona();
     opcoes[3] = individuo->clona();
 
-    cout<< "Distancia 0: "<<opcoes[0]->get_distancia()<<endl;
-    cout<< "Distancia 1: "<<opcoes[1]->get_distancia()<<endl;
-    cout<< "Distancia 2: "<<opcoes[2]->get_distancia()<<endl;
-    cout<< "Distancia 3: "<<opcoes[3]->get_distancia()<<endl;
+    cout<< "Distancia 0: "<< opcoes[0]->get_distancia()<<endl;
+    cout<< "Distancia 1: "<< opcoes[1]->get_distancia()<<endl;
+    cout<< "Distancia 2: "<< opcoes[2]->get_distancia()<<endl;
+    cout<< "Distancia 3: "<< opcoes[3]->get_distancia()<<endl;
 
     //seleciona o gene c.
     cout<< "Selecionando c"<<endl;
@@ -952,7 +968,7 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
       cout<<"Calculando tipo 3."<<endl;
       Tipo3(opcoes[2], c, cLinha);
       cout<<"Calculando tiṕo 4."<<endl;
-      Tipo4(opcoes[3], c, cLinha);
+      //Tipo4(opcoes[3], c, cLinha);
       cout<<"Pegando menor distancia entre as opcoes."<<endl;
       for(int i=0; i<4; i++)
       {
