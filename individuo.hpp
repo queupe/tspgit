@@ -76,8 +76,10 @@ class TIndividuo
       //Cria um novo indivíduo
       void novo ();
       //Cria um novo indivíduo a partir de um vetor de genes
-		void novo (vector<TGene *> genes);
-	  //Cria um novo individuo a partir da tabela de conversão
+      void novo (vector<TGene *> genes);
+      //Cria um novo individuo a partir de um outro individuo.
+      void novo (TIndividuo* individuo);
+	    //Cria um novo individuo a partir da tabela de conversão
       void novo (vector<TTipoConversao> genes, int extraPadrao);
 
       string toString ();
@@ -111,6 +113,8 @@ class TIndividuo
       void inverte_sub_indice (int indice1, int indice2);
       void inverte_sub (TGene *G1, TGene *G2);
       void inverte_sub_id (int id1, int id2);
+
+      //
 
       //Clona o individuo. Necessário para o elitismo
       TIndividuo *clona ();

@@ -144,7 +144,8 @@ void TAlgGenetico::exec()
 TIndividuo *i1 = populacao->get_individuo(0);
 //TIndividuo *i2 = populacao->get_individuo(1);
 cout << i1->toString()<< " : " << i1->get_distancia() << endl;
-mutacao->processa(i1);
+if(getMutacao()!=14) mutacao->processa(i1);
+else mutacao->processa(i1, populacao);
 cout << i1->toString()<< " : " << i1->get_distancia() << endl;
 //cout << i2->toString()<< " : " << i2->get_distancia() << endl;
 //vector <TIndividuo *> v = cruzamento->processa(i1, i2, populacao, getMaxGeracao(), 1);

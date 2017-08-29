@@ -162,6 +162,19 @@ void TIndividuo::novo (vector<TGene *> genes)
    VP_dist += VP_Mapa->get_distancia(VP_indice[VP_qtdeGenes-1]->ori, VP_indice[0]->dest);
 }
 
+void TIndividuo::novo(TIndividuo *IndividuoAlternativo)
+{
+  vector<TGene*> Genes;
+  cout<<"Copiando individuo"<<endl;
+  cout<<"Quantidade de genes pra copiar: "<< IndividuoAlternativo->get_qtdeGenes()<<endl;
+  for(int i=0; i< IndividuoAlternativo->get_qtdeGenes();i++)
+  {
+    Genes.push_back(IndividuoAlternativo->get_por_indice(i));
+  }
+  cout<<"Quantidade de genes copiados:"<< Genes.size()<<endl;
+  novo(Genes);
+}
+
 string TIndividuo::toString ()
 {
    string resultado = "";

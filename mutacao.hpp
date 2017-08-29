@@ -36,6 +36,8 @@ class TMutacao
 
       TMutacao (TMapaGenes *mapa, TArqLog *arqSaida, int tipoMutacao);
       int processa (TIndividuo *individuo);
+      //para o NJ, que usa o ponteiro para populacao.
+      int processa (TIndividuo *individuo, TPopulacao *populacao);
 
    private:
       //Mutações
@@ -53,8 +55,8 @@ class TMutacao
       int DBM(TIndividuo *individuo);
       int DBM2(TIndividuo *individuo);
       int SHMO(TIndividuo *individuo);
+      //NJ precisa de um ponteiro para a populacao!!
       int NJ(TIndividuo *individuo, TPopulacao *populacao);
-      int TestMutation(TIndividuo *individuo);
 	  //Métodos auxiliares
       double calcValReverso (TGene *g1, TGene *g2);
       void Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha);
