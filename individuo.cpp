@@ -162,19 +162,6 @@ void TIndividuo::novo (vector<TGene *> genes)
    VP_dist += VP_Mapa->get_distancia(VP_indice[VP_qtdeGenes-1]->ori, VP_indice[0]->dest);
 }
 
-void TIndividuo::novo(TIndividuo *IndividuoAlternativo)
-{
-  vector<TGene*> Genes;
-  cout<<"Copiando individuo"<<endl;
-  cout<<"Quantidade de genes pra copiar: "<< IndividuoAlternativo->get_qtdeGenes()<<endl;
-  for(int i=0; i< IndividuoAlternativo->get_qtdeGenes();i++)
-  {
-    Genes.push_back(IndividuoAlternativo->get_por_indice(i));
-  }
-  cout<<"Quantidade de genes copiados:"<< Genes.size()<<endl;
-  novo(Genes);
-}
-
 string TIndividuo::toString ()
 {
    string resultado = "";
@@ -294,7 +281,9 @@ void TIndividuo::troca_sub(int index1, int size1, int index2, int size2)
    if (index1==0) return;
    
    //Não há troca a ser feita
-   if ((size1==size2)&&(size1==0)) return;
+   //Cuidado size2 pode não ser zero. Linha alterada por Allan
+   //if ((size1==size2)&&(size1==0)) return;
+   if ((size1==size2)&&(size1==0 || size2==0)) return;
 
    if (size1>0) 
    { 
