@@ -281,9 +281,9 @@ void TIndividuo::troca_sub(int index1, int size1, int index2, int size2)
    if (index1==0) return;
    
    //Não há troca a ser feita
-   //Cuidado size2 pode não ser zero. Linha alterada por Allan
+   //Linha alterada por Allan
    //if ((size1==size2)&&(size1==0)) return;
-   if ((size1==size2)&&(size1==0 || size2==0)) return;
+   if (size1==0 && size2==0) return;
 
    if (size1>0) 
    { 

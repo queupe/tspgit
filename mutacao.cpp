@@ -753,6 +753,11 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
     OutPathEnd = cLinha->ant;
     cout<<"OutPathEnd: "<< OutPathEnd->i<<endl;
   }
+  if(OutPathIni->i==0 && OutPathEnd->i==0)
+  {
+    cout<<"Sem caminho de fora.";
+    return;
+  }
   cout<<"Escolhendo R e S"<<endl;
   for(TGene *InnerGen = InnerPathIni; InnerGen->i != InnerPathEnd->prox->i; InnerGen = InnerGen->prox)
   {
@@ -830,6 +835,11 @@ void TMutacao::Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha)
     cout<<"OutPathIni: "<< OutPathIni->i<<endl;
     OutPathEnd = cLinha;
     cout<<"OutPathEnd: "<< OutPathEnd->i<<endl;
+  }
+  if(OutPathIni->i==0 && OutPathEnd->i==0)
+  {
+    cout<<"Sem caminho de fora.";
+    return;
   }
   cout<<"Escolhendo R e S"<<endl;
   for(TGene *InnerGen = InnerPathIni; InnerGen->i != InnerPathEnd->prox->i; InnerGen = InnerGen->prox)
@@ -912,6 +922,7 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
   for(int interacao=0; interacao<nMaxInteracoes; interacao++)
   {
     cout<< "Interação " << interacao <<endl;
+    cout<<"Clonando individuo."<<endl;
     //Opções de indivíduos a ser escolhida
     opcoes[0] = individuo->clona();
     opcoes[1] = individuo->clona();
@@ -979,14 +990,18 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
       cout<<"Calculando tipo 1."<<endl;
       if(c->i < cLinha->i) opcoes[0]->inverte_sub_indice(c->prox->i, cLinha->i);
       else opcoes[0]->inverte_sub_indice(cLinha->i, c->ant->i);
+      cout<<"opcao 0: "<< opcoes[0]->toString()<<endl;
       //Opção 2: o cLinha é fixo.
       cout<<"Calculando tipo 2."<<endl;
       if(c->i < cLinha->i) opcoes[1]->inverte_sub_indice(c->i, cLinha->ant->i);
       else opcoes[1]->inverte_sub_indice(cLinha->prox->i, c->i);
+      cout<<"opcao 1: "<< opcoes[1]->toString()<<endl;
       cout<<"Calculando tipo 3."<<endl;
       Tipo3(opcoes[2], c, cLinha);
-      cout<<"Calculando tiṕo 4."<<endl;
+      cout<<"opcao 2: "<< opcoes[2]->toString()<<endl;
+      cout<<"Calculando tipo 4."<<endl;
       Tipo4(opcoes[3], c, cLinha);
+      cout<<"opcao 3: "<< opcoes[3]->toString()<<endl;
       cout<<"Pegando menor distancia entre as opcoes."<<endl;
       for(int i=0; i<4; i++)
       {
@@ -1004,25 +1019,25 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
       {
         case 0:
           cout<<"Subistituindo individuo por opcao 0"<<endl;
-          individuo = opcoes[0];
+          *individuo = *opcoes[0];
           break;
         case 1:
           cout<<"Subistituindo individuo por opcao 1"<<endl;
-          individuo = opcoes[1];
+          *individuo = *opcoes[1];
           break;
         case 2:
           cout<<"Subistituindo individuo por opcao 2"<<endl;
-          individuo = opcoes[2];
+          *individuo = *opcoes[2];
           break;
         case 3:
           cout<<"Subistituindo individuo por opcao 3"<<endl;
-          individuo = opcoes[3];
+          *individuo = *opcoes[3];
           break;
       }
-      cout<<"Tamanho do individuo: "<<individuo->get_distancia()<<endl;
+      cout<<"Tamanho final do individuo: "<<individuo->get_distancia()<<endl;
     }
   }
-
+  cout<<"Individuo final do NJ: "<<individuo->toString()<<"\tdistancia: "<<individuo->get_distancia()<<endl;
   return 1;
 }
 
