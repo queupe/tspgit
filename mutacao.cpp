@@ -98,6 +98,11 @@ int TMutacao::processa (TIndividuo *individuo)
          return SHMO(individuo);
          break;
       }
+      case 14:
+      {
+         return HM(individuo);
+         break;
+      }
       default:
       {
          break;
@@ -715,6 +720,56 @@ int TMutacao::SHMO(TIndividuo *individuo)
   }
   return 1;
 }
+
+int TMutacao::HM(TIndividuo *individuo)
+{
+  TIndividuo *Clone;
+  vector<int> Indexes;
+  vector<TGene *> GenesPointer;
+  int idx = 1, n = TUtils::rnd(3, 8);
+
+  cout<<"Pegando indices:"<<endl;
+  for(int i=0, LastIndex=1, k = n+1; i<n; i++, LastIndex=idx+1, k--)
+  {
+    idx = TUtils::rnd(LastIndex, individuo->get_qtdeGenes() - k);
+    cout<<"Indice " << i << " = " << idx <<endl;
+    Indexes.push_back(idx);
+    GenesPointer.push_back(individuo->get_por_indice(idx));
+  }
+
+  do
+  {
+    cout<<"Clonando:"<<endl;
+    Clone = individuo->clona();
+    cout<<"Clone: "<< Clone->toString() << "  " << Clone->get_distancia()<<endl;
+    
+    for(unsigned i = 0; i < Indexes.size(); i++)
+    {
+      if(Indexes[i] != GenesPointer[i]->i)
+      {
+        for(unsigned g=0; g< GenesPointer.size(); g++)
+        {
+          if(GenesPointer[g]->i == Indexes[i])
+          {
+            individuo->troca_indice(GenesPointer[i]->i, GenesPointer[g]->i);
+          }
+        }
+      }
+    }
+    cout<<"individuo modificado: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
+    if(individuo->get_distancia() > Clone->get_distancia())
+    {
+      cout<<"Piorou, voltando."<<endl;
+      *individuo = *Clone;
+    }
+    cout<<"Individuo final: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
+  }while(next_permutation(Indexes.begin(), Indexes.end()));
+  cout<<"Novo individuo: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
+  return 1;
+}
+
+
+
 /**
   *Tipo 3:
   *  Metodo no NJ. Nele, pega-se um subcaminho interno que vai do gene c ao cLinha e outro externo

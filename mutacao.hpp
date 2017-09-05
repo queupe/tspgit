@@ -55,6 +55,7 @@ class TMutacao
       int DBM(TIndividuo *individuo);
       int DBM2(TIndividuo *individuo);
       int SHMO(TIndividuo *individuo);
+      int HM(TIndividuo *individuo);
       //NJ precisa de um ponteiro para a populacao!!
       int NJ(TIndividuo *individuo, TPopulacao *populacao);
 	  //Métodos auxiliares
