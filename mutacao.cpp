@@ -728,20 +728,16 @@ int TMutacao::HM(TIndividuo *individuo)
   vector<TGene *> GenesPointer;
   int idx = 1, n = TUtils::rnd(3, 8);
 
-  cout<<"Pegando indices:"<<endl;
   for(int i=0, LastIndex=1, k = n+1; i<n; i++, LastIndex=idx+1, k--)
   {
     idx = TUtils::rnd(LastIndex, individuo->get_qtdeGenes() - k);
-    cout<<"Indice " << i << " = " << idx <<endl;
     Indexes.push_back(idx);
     GenesPointer.push_back(individuo->get_por_indice(idx));
   }
 
   do
   {
-    //cout<<"Clonando:"<<endl;
     Clone = individuo->clona();
-    //cout<<"Clone: "<< Clone->toString() << "  " << Clone->get_distancia()<<endl;
     
     for(unsigned i = 0; i < Indexes.size(); i++)
     {
@@ -757,15 +753,11 @@ int TMutacao::HM(TIndividuo *individuo)
         }
       }
     }
-    //cout<<"individuo modificado: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
     if(individuo->get_distancia() > Clone->get_distancia())
     {
-      //cout<<"Piorou, voltando."<<endl;
       *individuo = *Clone;
     }
-    //cout<<"Individuo final: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
-  }while(next_permutation(Indexes.begin(), Indexes.end()));
-  cout<<"Novo individuo: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
+  } while(next_permutation(Indexes.begin(), Indexes.end()));
   return 1;
 }
 
@@ -784,37 +776,24 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
   TGene *InnerPathIni, *InnerPathEnd, *OutPathIni, *OutPathEnd, *R, *S, *InsertionPoint, *sNextGen;
   double ChangedValue, MaxValue = -1 * infinito;
 
-  cout<<"Calculando opcao 3"<<endl;
   if(c->i < cLinha->i)
   {
-    cout<<"c<cLinha"<<endl;
     InnerPathIni = c;
-    cout<<"InnerPathIni: "<< InnerPathIni->i<<endl;
     InnerPathEnd = cLinha;
-    cout<<"InnerPathEnd: "<< InnerPathEnd->i<<endl;
     OutPathIni = cLinha->prox;
-    cout<<"OutPathIni: "<< OutPathIni->i<<endl;
     OutPathEnd = c->ant;
-    cout<<"OutPathEnd: "<< OutPathEnd->i<<endl;
   }
   else
   {
-    cout<<"cLinha<c"<<endl;
     InnerPathIni = cLinha;
-    cout<<"InnerPathIni: "<< InnerPathIni->i<<endl;
     InnerPathEnd = c;
-    cout<<"InnerPathEnd: "<< InnerPathEnd->i<<endl;
     OutPathIni = c->prox;
-    cout<<"OutPathIni: "<< OutPathIni->i<<endl;
     OutPathEnd = cLinha->ant;
-    cout<<"OutPathEnd: "<< OutPathEnd->i<<endl;
   }
   if(OutPathIni->i==0 && OutPathEnd->i==0)
   {
-    cout<<"Sem caminho de fora.";
     return;
   }
-  cout<<"Escolhendo R e S"<<endl;
   for(TGene *InnerGen = InnerPathIni; InnerGen->i != InnerPathEnd->prox->i; InnerGen = InnerGen->prox)
   {
     for(TGene *OutGen = OutPathIni; OutGen->i != OutPathEnd->prox->i; OutGen = OutGen->prox)
@@ -831,30 +810,17 @@ void TMutacao::Tipo3(TIndividuo *opcao, TGene *c, TGene *cLinha)
       }
     }
   }
-  cout<<"Indice de R e S são "<< R->i<<" "<< S->i <<endl;
   InsertionPoint = sNextGen = S->prox;
-  //A posição 0 não pode ser alterada por conversão do autor.
   if(InsertionPoint->i == 0) InsertionPoint = sNextGen = InsertionPoint->prox;
-  cout<<"Indice do ponto de inserção "<< InsertionPoint->i<<endl;
-  //Basicamente: É pego um gene do caminho a ser transferido e seu sucessor, depois de transferido e seu index alterado no processo, o proximo é 
-  //  pego baseado no Nextgen, que serve como ponteiro para o proximo gene da lista. No caso do tipo 3, é a lista de fora do caminho c.....cLinha.
-  cout<<"Inserindo caminho de dentro no de fora."<<endl;
   for(TGene *NextGen = InnerPathIni->prox, *InnerGen = InnerPathIni;
      InnerGen != InnerPathEnd->prox; NextGen=NextGen->prox, InnerGen = NextGen->ant, InsertionPoint = InsertionPoint->prox)
   {
-    cout<<"indice NextGen: "<< NextGen->i<<"; ";
-    cout<<"indice InnerGen: "<< InnerGen->i<<"; ";
-    cout<<"Indice InsertionPoint: "<< InsertionPoint->i<<endl;
-    cout<<"opcao atual: "<< opcao->toString()<<endl;
     if(InsertionPoint->i == 0 || InnerGen->i == 0)
     {
-      cout<<"Apontando pro 0, sem alteração."<<endl;
       continue;
     }
     opcao->troca_sub(InsertionPoint->i, 0, InnerGen->i, 1);
-    cout<<"opcao depois: "<< opcao->toString()<<endl;
   }
-  cout<<"Individuo final: "<< opcao->toString()<<endl;
   opcao->troca_sub(R->prox->i, 0, sNextGen->i, 1);
 }
 /**
@@ -867,37 +833,24 @@ void TMutacao::Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha)
   TGene *InnerPathIni, *InnerPathEnd, *OutPathIni, *OutPathEnd, *InsertionPoint, *R, *S, *sNextGen;
   double ChangedValue, MaxValue = -1 * infinito;
 
-  cout<<"Calculando opcao 4"<<endl;
   if(c->i < cLinha->i)
   {
-    cout<<"c<cLinha"<<endl;
     InnerPathIni = c->prox;
-    cout<<"InnerPathIni: "<< InnerPathIni->i<<endl;
     InnerPathEnd = cLinha->ant;
-    cout<<"InnerPathEnd: "<< InnerPathEnd->i<<endl;
     OutPathIni = cLinha;
-    cout<<"OutPathIni: "<< OutPathIni->i<<endl;
     OutPathEnd = c;
-    cout<<"OutPathEnd: "<< OutPathEnd->i<<endl;
   }
   else
   {
-    cout<<"cLinha<c"<<endl;
     InnerPathIni = cLinha->prox;
-    cout<<"InnerPathIni: "<< InnerPathIni->i<<endl;
     InnerPathEnd = c->ant;
-    cout<<"InnerPathEnd: "<< InnerPathEnd->i<<endl;
     OutPathIni = c;
-    cout<<"OutPathIni: "<< OutPathIni->i<<endl;
     OutPathEnd = cLinha;
-    cout<<"OutPathEnd: "<< OutPathEnd->i<<endl;
   }
   if(OutPathIni->i==0 && OutPathEnd->i==0)
   {
-    cout<<"Sem caminho de fora.";
     return;
   }
-  cout<<"Escolhendo R e S"<<endl;
   for(TGene *InnerGen = InnerPathIni; InnerGen->i != InnerPathEnd->prox->i; InnerGen = InnerGen->prox)
   {
     for(TGene *OutGen = OutPathIni; OutGen->i != OutPathEnd->prox->i; OutGen = OutGen->prox)
@@ -914,7 +867,6 @@ void TMutacao::Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha)
       }
     }
   }
-  cout<<"Escolhendo R e S"<<endl;
   for(TGene *InnerGen = InnerPathIni; InnerGen->i != InnerPathEnd->prox->i; InnerGen = InnerGen->prox)
   {
     for(TGene *OutGen = OutPathIni; OutGen->i != OutPathEnd->prox->i; OutGen = OutGen->prox)
@@ -931,30 +883,17 @@ void TMutacao::Tipo4(TIndividuo *opcao, TGene *c, TGene *cLinha)
       }
     }
   }
-  cout<<"Indice de R e S são "<< R->i<<" "<< S->i <<endl;
   InsertionPoint = sNextGen = S->prox;
-  //A posição 0 não pode ser alterada por conversão do autor.
   if(InsertionPoint->i == 0) InsertionPoint = sNextGen = InsertionPoint->prox;
-  cout<<"Indice do ponto de inserção "<< InsertionPoint->i<<endl;
-  //Basicamente: É pego um gene do caminho a ser transferido e seu sucessor, depois de transferido e seu index alterado no processo, o proximo é 
-  //  pego baseado no Nextgen, que serve como ponteiro para o proximo gene da lista. No caso do tipo 3, é a lista de fora do caminho c.....cLinha.
-  cout<<"Inserindo caminho de dentro no de fora."<<endl;
   for(TGene *NextGen = InnerPathIni->prox, *InnerGen = InnerPathIni;
      InnerGen != InnerPathEnd->prox; NextGen=NextGen->prox, InnerGen = NextGen->ant, InsertionPoint = InsertionPoint->prox)
   {
-    cout<<"indice NextGen: "<< NextGen->i<<"; ";
-    cout<<"indice InnerGen: "<< InnerGen->i<<"; ";
-    cout<<"Indice InsertionPoint: "<< InsertionPoint->i<<endl;
-    cout<<"opcao atual: "<< opcao->toString()<<endl;
     if(InsertionPoint->i == 0 || InnerGen->i == 0)
     {
-      cout<<"Apontando pro 0, sem alteração."<<endl;
       continue;
     }
     opcao->troca_sub(InsertionPoint->i, 0, InnerGen->i, 1);
-    cout<<"opcao depois: "<< opcao->toString()<<endl;
   }
-  cout<<"Individuo final: "<< opcao->toString()<<endl;
   opcao->troca_sub(R->prox->i, 0, sNextGen->i, 1);
 }
 
@@ -972,128 +911,88 @@ int TMutacao::NJ(TIndividuo *individuo, TPopulacao *populacao)
   opcoes = (TIndividuo **) malloc(4 * sizeof(TIndividuo*));
   if(opcoes==NULL)
   {
-    cout<<"Erro no maloc de opcoes!"<<endl;
     return 0;
   }
   for(int interacao=0; interacao<nMaxInteracoes; interacao++)
   {
-    cout<< "Interação " << interacao <<endl;
-    cout<<"Clonando individuo."<<endl;
     //Opções de indivíduos a ser escolhida
     opcoes[0] = individuo->clona();
     opcoes[1] = individuo->clona();
     opcoes[2] = individuo->clona();
     opcoes[3] = individuo->clona();
 
-    cout<< "Distancia 0: "<< opcoes[0]->get_distancia()<<endl;
-    cout<< "Distancia 1: "<< opcoes[1]->get_distancia()<<endl;
-    cout<< "Distancia 2: "<< opcoes[2]->get_distancia()<<endl;
-    cout<< "Distancia 3: "<< opcoes[3]->get_distancia()<<endl;
-
     //seleciona o gene c.
-    cout<< "Selecionando c"<<endl;
     c = individuo->get_por_indice(TUtils::rnd(1, individuo->get_qtdeGenes()-1));
-    cout<< "Posicao do c: " << c->i<<endl;
 
     //seleciona o gene cLinha
-    cout<< "Selecionando cLinha"<<endl;
     if(TUtils::flip(probabilidade))
     {
-      cout<< "Acertou na probabilidade."<<endl;
       //pega o proximo gene de um indivíduo randomico na populaçao, sendo c != cLinha.
       do
       {
         rndi = TUtils::rnd(0, populacao->get_qtdeIndividuo() -1);
-        cout<< "Selecionou individuo randomico na populacao com indice "<< rndi<<endl;
         indTemp = populacao->get_individuo(rndi);
         cTemp = indTemp->get_por_id(c->id)->prox;
         cLinha = individuo->get_por_id(cTemp->id);
       }while (c->id == cLinha->id);
-      cout<< "cLinha indice "<<cLinha->i<<endl;
     }
     else
     {
       //Pega no individuo o id do gene que tem a menor distancia possivel com c dentro do mapa.
-      cout<<"Errou na probabilidade."<<endl;
       vector< pair<int, double>> distancias;
-      cout<<"Montando par de distancias"<<endl;
       for(int i=1; i<individuo->get_qtdeGenes(); i++)
       {
         if(i!=c->id)
         {
           pair<int, double> dist(i, mapaGenes->get_distancia(i, c->id));
-          cout<< "Distancia "<< dist.first <<": "<<dist.second<<endl;
           distancias.push_back(dist);
         }
       }
-      cout<<"Quantidades de par de distancias: "<< distancias.size()<<endl;
-      cout<<"Ordenando distancias"<<endl;
       sort(distancias.begin(), distancias.end(), TUtils::compare_pair_second<int, double, std::less<double>>());
       rndi = TUtils::rnd(0, nMaxVizinhos-1);
       cLinha = individuo->get_por_id(distancias[rndi].first);
-      cout<<"cLinha selecionado com indice "<< cLinha->i<<endl;
     }
     //Se são visinhos, pula a interação;
     if(c->prox == cLinha || c->ant == cLinha)
     {
-      cout<<"c e cLinha são vizinhos. Pulando a interacao."<<endl;
       continue;
     }
     else
     {
-      cout<<"c e cLinha Não são visinhos"<<endl;
       //Opçao 1: o c é fixo.
-      cout<<"Calculando tipo 1."<<endl;
       if(c->i < cLinha->i) opcoes[0]->inverte_sub_indice(c->prox->i, cLinha->i);
       else opcoes[0]->inverte_sub_indice(cLinha->i, c->ant->i);
-      cout<<"opcao 0: "<< opcoes[0]->toString()<<endl;
       //Opção 2: o cLinha é fixo.
-      cout<<"Calculando tipo 2."<<endl;
       if(c->i < cLinha->i) opcoes[1]->inverte_sub_indice(c->i, cLinha->ant->i);
       else opcoes[1]->inverte_sub_indice(cLinha->prox->i, c->i);
-      cout<<"opcao 1: "<< opcoes[1]->toString()<<endl;
-      cout<<"Calculando tipo 3."<<endl;
       Tipo3(opcoes[2], c, cLinha);
-      cout<<"opcao 2: "<< opcoes[2]->toString()<<endl;
-      cout<<"Calculando tipo 4."<<endl;
       Tipo4(opcoes[3], c, cLinha);
-      cout<<"opcao 3: "<< opcoes[3]->toString()<<endl;
-      cout<<"Pegando menor distancia entre as opcoes."<<endl;
       for(int i=0; i<4; i++)
       {
         CurrentDisntance = opcoes[i]->get_distancia();
-        cout<<"Distancia da opcao "<<i<<": "<<CurrentDisntance<<endl;
         if(CurrentDisntance < MenorDinstancia)
         {
           MenorDinstancia = CurrentDisntance;
           MelhorOpcao = i;
         }
       }
-      cout<<"A melhor opção é a opcao "<< MelhorOpcao<<endl;
-      cout<<"Tamanho do individuo: "<<individuo->get_qtdeGenes()<<endl;
       switch(MelhorOpcao)
       {
         case 0:
-          cout<<"Subistituindo individuo por opcao 0"<<endl;
           *individuo = *opcoes[0];
           break;
         case 1:
-          cout<<"Subistituindo individuo por opcao 1"<<endl;
           *individuo = *opcoes[1];
           break;
         case 2:
-          cout<<"Subistituindo individuo por opcao 2"<<endl;
           *individuo = *opcoes[2];
           break;
         case 3:
-          cout<<"Subistituindo individuo por opcao 3"<<endl;
           *individuo = *opcoes[3];
           break;
       }
-      cout<<"Tamanho final do individuo: "<<individuo->get_distancia()<<endl;
     }
   }
-  cout<<"Individuo final do NJ: "<<individuo->toString()<<"\tdistancia: "<<individuo->get_distancia()<<endl;
   return 1;
 }
 
