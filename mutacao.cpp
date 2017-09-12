@@ -739,9 +739,9 @@ int TMutacao::HM(TIndividuo *individuo)
 
   do
   {
-    cout<<"Clonando:"<<endl;
+    //cout<<"Clonando:"<<endl;
     Clone = individuo->clona();
-    cout<<"Clone: "<< Clone->toString() << "  " << Clone->get_distancia()<<endl;
+    //cout<<"Clone: "<< Clone->toString() << "  " << Clone->get_distancia()<<endl;
     
     for(unsigned i = 0; i < Indexes.size(); i++)
     {
@@ -752,17 +752,18 @@ int TMutacao::HM(TIndividuo *individuo)
           if(GenesPointer[g]->i == Indexes[i])
           {
             individuo->troca_indice(GenesPointer[i]->i, GenesPointer[g]->i);
+            break;
           }
         }
       }
     }
-    cout<<"individuo modificado: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
+    //cout<<"individuo modificado: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
     if(individuo->get_distancia() > Clone->get_distancia())
     {
-      cout<<"Piorou, voltando."<<endl;
+      //cout<<"Piorou, voltando."<<endl;
       *individuo = *Clone;
     }
-    cout<<"Individuo final: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
+    //cout<<"Individuo final: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
   }while(next_permutation(Indexes.begin(), Indexes.end()));
   cout<<"Novo individuo: "<< individuo->toString() << "  " << individuo->get_distancia()<<endl;
   return 1;
