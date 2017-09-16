@@ -88,6 +88,21 @@ int TMutacao::processa (TIndividuo *individuo)
          return DBM(individuo);
          break;
       }
+      case 12:
+      {
+         return DBM2(individuo);
+         break;
+      }
+      case 13:
+      {
+         return SHMO(individuo);
+         break;
+      }
+      case 14:
+      {
+         return HM(individuo);
+         break;
+      }
       default:
       {
          break;
@@ -97,6 +112,10 @@ int TMutacao::processa (TIndividuo *individuo)
    return 0;
 }
 
+int TMutacao::processa(TIndividuo *individuo, TPopulacao *populacao)
+{
+  return NJ(individuo, populacao);
+}
 /**
  *
  * Exchange mutation (EM)
