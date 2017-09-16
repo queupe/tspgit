@@ -142,15 +142,10 @@ void TAlgGenetico::exec()
 /*
 //Descomente para teste de cruzamento
 TIndividuo *i1 = populacao->get_individuo(0);
-<<<<<<< HEAD
-TIndividuo *i2 = populacao->get_individuo(1);
-
-=======
 //TIndividuo *i2 = populacao->get_individuo(1);
 cout << i1->toString()<< " : " << i1->get_distancia() << endl;
 if(getMutacao()!=15) mutacao->processa(i1);
 else mutacao->processa(i1, populacao);
->>>>>>> a3ca33434aa7ff3d65de150febc820fe4e73cc31
 cout << i1->toString()<< " : " << i1->get_distancia() << endl;
 cout << i2->toString()<< " : " << i2->get_distancia() << endl;
    vector <TIndividuo *> v = cruzamento->processa(i1, i2, populacao, getMaxGeracao(), 1);
@@ -345,7 +340,6 @@ void TAlgGenetico::fazMutacao(TPopulacao *populacao)
       int j = TUtils::rnd (ini, populacao->get_tamanho()-1);
 
       populacao->sub_dist_tot((populacao->get_individuo(j))->get_distancia());
-<<<<<<< HEAD
 
       mutacao->processa(populacao->get_individuo(j));
 
@@ -360,22 +354,6 @@ void TAlgGenetico::fazMutacao(TPopulacao *populacao)
 
       mutacaoAGRecursivo(populacao, j);
 
-=======
-
-      mutacao->processa(populacao->get_individuo(j));
-
-      populacao->soma_dist_tot((populacao->get_individuo(j))->get_distancia());
-   }
-
-   for (int i=0; i < qtdeMutacaoRecursiva; i++)
-   {
-      int j = TUtils::rnd (1, populacao->get_tamanho()-1);
-
-      populacao->sub_dist_tot((populacao->get_individuo(j))->get_distancia());
-
-      mutacaoAGRecursivo(populacao, j);
-
->>>>>>> 3ddd31f5e45325ff4facef994dc07ddafc24f2f2
       populacao->soma_dist_tot((populacao->get_individuo(j))->get_distancia());
    }
 	
@@ -439,15 +417,9 @@ void TAlgGenetico::mutacaoAGRecursivo(TPopulacao *populacao, int indice)
          delete tabConversao;
          manipulado->inverte_sub_indice(TUtils::rnd(1, manipulado->get_qtdeGenes()-1), TUtils::rnd(1, manipulado->get_qtdeGenes()-1));
       }
-<<<<<<< HEAD
 
    }while (qtdeGenes<=2);
 
-=======
-
-   }while (qtdeGenes<=2);
-
->>>>>>> 3ddd31f5e45325ff4facef994dc07ddafc24f2f2
    // Se não reduzir, não faz nada
 	int reudcaoMinima = getPercentReducao()*0.01*manipulado->get_qtdeGenes();
    if (qtdeGenes >= reudcaoMinima)
