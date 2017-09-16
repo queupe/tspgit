@@ -21,7 +21,14 @@ class TUtils
       static int rnd(unsigned low, unsigned high);
 		static double rndd(double low, double high);
 		static double rndd(double low, double high, unsigned calibracao);
-		static bool flip(float prob);
+        static bool flip(float prob);
+    
+    template <class T1, class T2, class Pred = std::less<T2> >
+    struct compare_pair_second {
+        bool operator()(const std::pair<T1,T2>&left, const std::pair<T1,T2>&right) {
+            Pred p;
+            return p(left.second, right.second);
+        }
+    };
 };
-
 #endif	/* _UTIL_H */

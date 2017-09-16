@@ -10,12 +10,16 @@
   <integer>15</integer>
 
   <printParcial>1</printParcial>
-  <tamanhoPopulacao>50</tamanhoPopulacao>
-  <numGeracoes>4000</numGeracoes>
+  <tamanhoPopulacao>30</tamanhoPopulacao>
+  <numGeracoes>50</numGeracoes>
   <percentManipulacao>30</percentManipulacao>
   <percentMutacao>20</percentMutacao>
-  <tipoMutacaoPopulacao>2</tipoMutacaoPopulacao>
-  <tipoMutacaoIndividuo>0</tipoMutacaoIndividuo>
-  <tipoNovaGeracao>2</tipoNovaGeracao>
-
+  <percentReducao>77</percentReducao>
+  <mutacao>3</mutacao>
+  <selIndMutacao>1</selIndMutacao>
+  <cruzamento>0</cruzamento>
+  <numExec>1</numExec>
+  <roleta>0</roleta>
+  <percentElitismo>70</percentElitismo>
+  <ativaRecursivo>1</ativaRecursivo>
 </configuracaoTSP>
