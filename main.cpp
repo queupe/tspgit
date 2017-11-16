@@ -6,7 +6,7 @@
 *
 *  PPGI - NCE - UFRJ
 *  Data Criação: 05/05/2017
-*  Datas de Modificações: 02/07/2017
+*  Datas de Modificações:
 *
 * Programa de Algorítmo Genetico para resolver tsp de forma recursiva
 * Necessário instalação da biblioteca libxml
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
       cabecalho  += "\n";
 
       cabecalho  += "Ativa Recursivo;";
-      cabecalho  += to_string(config->ativaRecursivo);
+      cabecalho  += to_string(config->percentMutacaoRecursiva);
       cabecalho  += "\n";
 
       cabecalho  += "Percentual de Redução;";
@@ -148,8 +148,8 @@ int main(int argc, char *argv[])
       cabecalho  += to_string(config->percentElitismo);
       cabecalho  += "\n";
 
-      cabecalho  += "Seleção para Cruzamento (Roleta);";
-      cabecalho  += to_string(config->roleta);
+      cabecalho  += "Seleção para Cruzamento;";
+      cabecalho  += to_string(config->selecao);
       cabecalho  += "\n";
 
       cabecalho  += "Forma de Seleção par Mutação;";
@@ -165,10 +165,10 @@ int main(int argc, char *argv[])
       ag->setMaxGeracao(config->maxGeracao);
       ag->setPercentElitismo(config->percentElitismo);
       ag->setPercentMutacao(config->percentMutacao);
-	  ag->setProfundidadeMaxima(config->profundidadeMaxima);
-      ag->setRoleta(config->roleta);
+	   ag->setProfundidadeMaxima(config->profundidadeMaxima);
+      ag->setSelecao(config->selecao);
       ag->setSelIndMutacao(config->selIndMutacao);
-      ag->setAtivaRecursivo(config->ativaRecursivo);
+      ag->setPercentMutacaoRecursiva(config->percentMutacaoRecursiva);
       ag->setPercentReducao(config->percentReducao);
       ag->exec();
 
