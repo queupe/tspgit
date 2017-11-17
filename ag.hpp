@@ -29,8 +29,9 @@ class TAlgGenetico
    private:
       time_t sysTime1;
       time_t sysTime2;
+      int VP_segTimeOut;
       int VP_profundidade;
-      
+
       int VP_tamPopulacao;
       int VP_maxGeracao;
       int VP_percentMutacao;
@@ -54,8 +55,8 @@ class TAlgGenetico
 		unsigned VP_Comb_Rec;
       unsigned VP_Entr_Rec;
 		unsigned VP_Exec_Rec;
-		
-   public:      
+
+   public:
       TMutacao *mutacao;
       TCruzamento *cruzamento;
 
@@ -65,7 +66,7 @@ class TAlgGenetico
       double get_melhor_dst();
       int get_melhor_gera();
 	   int get_profundidade();
-		
+
 		unsigned getEntradaRec();
 		unsigned getExecRec();
 		unsigned getCombinaRec();
@@ -100,11 +101,12 @@ class TAlgGenetico
       int getSelIndMutacao ();
 
       void setTime (time_t sTime);
+      void setTimeOut (int seg);
       //Métodos
       TAlgGenetico (TMapaGenes *mapa, TArqLog *arqSaida, int profundidade);
 		TAlgGenetico (TMapaGenes *mapa, TArqLog *arqSaida);
       ~TAlgGenetico ();
-	  
+
 		void exec(TIndividuo *indBase, TTabConversao *tabConversao, int extraPadrao);
       void exec ();
 

@@ -170,6 +170,7 @@ int main(int argc, char *argv[])
       ag->setSelIndMutacao(config->selIndMutacao);
       ag->setPercentMutacaoRecursiva(config->percentMutacaoRecursiva);
       ag->setPercentReducao(config->percentReducao);
+      ag->setTimeOut(config->timeout);
       ag->exec();
 
       arqSaida->addLinha("");

@@ -49,6 +49,7 @@ class TConfig
                                    //  0 - o melhor individuo nunca é selecionado
                                    //  1 - o melhor individuo sempre é seleconado
                                    //  2 - seleção do melhor individuo é aleatória
+      int timeout;                // <= 0  não tem timeout. Valore em segundos
 
       /*******************************************************
            Os valores padrões são os utilizados no artigo
