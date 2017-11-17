@@ -881,7 +881,7 @@ vector <TIndividuo *>TCruzamento::HX(TIndividuo *parceiro1, TIndividuo *parceiro
 
 	double custo;
 	double min;
-   TGene *proxG;
+    TGene *proxG;
 
 	//Obs.: por causa da forma que o indivíduo é tratado, tendo 0
 	//sempre como a cidade inical, será necessário uma adequação.
@@ -898,7 +898,7 @@ vector <TIndividuo *>TCruzamento::HX(TIndividuo *parceiro1, TIndividuo *parceiro
       //Verificando os vizinhos do gene em parente 1
 
 		//se ainda não foi posicionado
-      gTmp = filho1->get_por_id(found->prox->id);
+        gTmp = filho1->get_por_id(found->prox->id);
 		if ((gTmp->i > ini && gTmp->i < fim) || (gTmp->i==0 && fim == filho1->get_qtdeGenes()))
 		{
 		   custo = VP_Mapa->get_distancia(found->ori, found->prox->dest);
@@ -910,7 +910,7 @@ vector <TIndividuo *>TCruzamento::HX(TIndividuo *parceiro1, TIndividuo *parceiro
 		}
 
 		//se ainda não foi posicionado
-      gTmp = filho1->get_por_id(found->ant->id);
+        gTmp = filho1->get_por_id(found->ant->id);
 		if ((gTmp->i > ini && gTmp->i < fim) || (gTmp->i==0 && fim == filho1->get_qtdeGenes()))
 		{
 		   custo = VP_Mapa->get_distancia(found->ori, found->ant->dest);
@@ -921,11 +921,11 @@ vector <TIndividuo *>TCruzamento::HX(TIndividuo *parceiro1, TIndividuo *parceiro
 			}
 		}
 
-      //Verificando os vizinhos do gene em parente 2
+        //Verificando os vizinhos do gene em parente 2
 		found = parceiro2->get_por_id(g->id);
 
 		//se ainda não foi posicionado
-      gTmp = filho1->get_por_id(found->prox->id);
+        gTmp = filho1->get_por_id(found->prox->id);
 		if ((gTmp->i > ini && gTmp->i < fim) || (gTmp->i==0 && fim == filho1->get_qtdeGenes()))
 		{
 		   custo = VP_Mapa->get_distancia(found->ori, found->prox->dest);
@@ -937,7 +937,7 @@ vector <TIndividuo *>TCruzamento::HX(TIndividuo *parceiro1, TIndividuo *parceiro
 		}
 
 		//se ainda não foi posicionado
-      gTmp = filho1->get_por_id(found->ant->id);
+        gTmp = filho1->get_por_id(found->ant->id);
 		if ((gTmp->i > ini && gTmp->i < fim) || (gTmp->i==0 && fim == filho1->get_qtdeGenes()))
 		{
 		   custo = VP_Mapa->get_distancia(found->ori, found->ant->dest);

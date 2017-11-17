@@ -40,6 +40,7 @@ void TConfig::leInfo(xmlDocPtr doc, xmlNode * a_node)
          else if (!xmlStrcmp(cur_node->name, (xmlChar *)"selecao")) selecao = val;
          else if (!xmlStrcmp(cur_node->name, (xmlChar *)"selIndMutacao")) selIndMutacao = val;
 		   else if (!xmlStrcmp(cur_node->name, (xmlChar *)"profundidadeMaxima")) profundidadeMaxima = val;
+		   else if (!xmlStrcmp(cur_node->name, (xmlChar *)"timeout")) timeout = val;
 
       }
 
@@ -64,6 +65,7 @@ TConfig::TConfig()
    percentElitismo = 70;
    profundidadeMaxima = 5;
 	selecao = 0;
+	timeout = 0;
 }
 
 void TConfig::carregaDoArquivo(char *nomeArquivo)
