@@ -34,6 +34,7 @@ class TIndividuo
 
       int VP_qtdeGenes;
       double VP_dist;
+		double VP_distInv; // 1/VP_dist para roleta
 
       int VP_qtdeGeneAlloc;
 
@@ -70,29 +71,30 @@ class TIndividuo
       int get_qtdeGenes();
 
       double get_distancia ();
+		double get_distanciaInv ();
 
       //Cria um novo indivíduo
       void novo ();
       //Cria um novo indivíduo a partir de um vetor de genes
-	  void novo (vector<TGene *> genes);
-	  //Cria um novo individuo a partir da tabela de conversão
+      void novo (vector<TGene *> genes);
+	    //Cria um novo individuo a partir da tabela de conversão
       void novo (vector<TTipoConversao> genes, int extraPadrao);
 
       string toString ();
       string toString (int init);
-	  string toStringExpand ();
+		string toStringExpand ();
 
       //Troca a posição de 2 genes pelo nome
       void troca(int g1, int g2);
       //Troca a posição de 2 genes pelo indice
       void troca_indice(int index1, int index2);
 	  
-	  //Troca 2 blocos de genes pelo indice
-	  //Obs.: Se o tamanho de um dos blocos for 0,
-	  //      será como se movesse o outro.
-	  //      Se o tamanho for negativo,
-	  //      além da troca, haverá uma inversão do bloco        
-	  void troca_sub(int index1, int size1, int index2, int size2);
+		//Troca 2 blocos de genes pelo indice
+		//Obs.: Se o tamanho de um dos blocos for 0,
+		//      será como se movesse o outro.
+		//      Se o tamanho for negativo,
+		//      além da troca, haverá uma inversão do bloco        
+		void troca_sub(int index1, int size1, int index2, int size2);
 	  
       //Embaralha os genes de um individuo
       void embaralha ();
@@ -109,6 +111,8 @@ class TIndividuo
       void inverte_sub_indice (int indice1, int indice2);
       void inverte_sub (TGene *G1, TGene *G2);
       void inverte_sub_id (int id1, int id2);
+
+      //
 
       //Clona o individuo. Necessário para o elitismo
       TIndividuo *clona ();
