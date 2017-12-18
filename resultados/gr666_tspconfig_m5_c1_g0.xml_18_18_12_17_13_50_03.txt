@@ -1,0 +1,32 @@
+Instância;./files/gr666.xml
+Execução;19 / 25
+Tamanho da Populaçap;200
+Máximo de gerações;300
+Mutação;5
+Cruzamento;1
+% Manpulação;30
+% Mutação;2
+Print Parcial;1
+Ativa Recursivo;0
+Percentual de Redução;78
+Profundidade Máxima;100
+Percentual de Eltismo;70
+Seleção para Cruzamento;0
+Forma de Seleção par Mutação;1
+
+Geração 1 / 300:;Profundidade;0;Melhor;4127295.000000;Pior;5026752.000000;Media;4478532.430000;Tempo;160.000000
+Geração 2 / 300:;Profundidade;0;Melhor;4088455.000000;Pior;4988180.000000;Media;4465110.500000;Tempo;319.000000
+Geração 3 / 300:;Profundidade;0;Melhor;4050196.000000;Pior;5038471.000000;Media;4461100.975000;Tempo;480.000000
+Geração 4 / 300:;Profundidade;0;Melhor;4010351.000000;Pior;5059766.000000;Media;4442802.245000;Tempo;640.000000
+Geração 5 / 300:;Profundidade;0;Melhor;3972798.000000;Pior;5058373.000000;Media;4448511.260000;Tempo;800.000000
+Geração 6 / 300:;Profundidade;0;Melhor;3935959.000000;Pior;5057539.000000;Media;4438260.255000;Tempo;961.000000
+Geração 7 / 300:;Profundidade;0;Melhor;3898753.000000;Pior;5012684.000000;Media;4427777.560000;Tempo;1120.000000
+Geração 8 / 300:;Profundidade;0;Melhor;3859774.000000;Pior;5016485.000000;Media;4417234.995000;Tempo;1278.000000
+Geração 9 / 300:;Profundidade;0;Melhor;3823756.000000;Pior;4958146.000000;Media;4414894.075000;Tempo;1439.000000
+Geração 10 / 300:;Profundidade;0;Melhor;3787477.000000;Pior;4992190.000000;Media;4404763.810000;Tempo;1603.000000
+Geração 11 / 300:;Profundidade;0;Melhor;3751381.000000;Pior;4958679.000000;Media;4401652.255000;Tempo;1763.000000
+Geração 12 / 300:;Profundidade;0;Melhor;3716320.000000;Pior;5014234.000000;Media;4407935.635000;Tempo;1924.000000
+Geração 13 / 300:;Profundidade;0;Melhor;3680712.000000;Pior;4985004.000000;Media;4395495.840000;Tempo;2082.000000
+Geração 14 / 300:;Profundidade;0;Melhor;3642797.000000;Pior;4988561.000000;Media;4414822.635000;Tempo;2300.000000
+Geração 15 / 300:;Profundidade;0;Melhor;3607076.000000;Pior;5038106.000000;Media;4392461.875000;Tempo;2548.000000
+Geração 16 / 300:;Profundidade;0;Melhor;3572460.000000;Pior;5063609.000000;Media;4379949.135000;Tempo;2832.000000
