@@ -23,5 +23,5 @@
 <percentElitismo>70</percentElitismo>
 <ativaRecursivo>0</ativaRecursivo>
 <percentMutacaoRecursiva>0</percentMutacaoRecursiva>
-<timeout>4000</timeout
+<timeout>4000</timeout>
 </configuracaoTSP>
