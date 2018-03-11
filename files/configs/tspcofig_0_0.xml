@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+ï»¿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <configuracaoTSP>
 
 <name>tspconfig</name>
 
 <source>TSPLIB</source>
 
-<description>Configuração da programa de Algoritmo Genético</description>
+<description>ConfiguraÃ§Ã£o da programa de Algoritmo GenÃ©tico</description>
 
 <integer>15</integer>
 
