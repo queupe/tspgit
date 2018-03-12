@@ -5,7 +5,7 @@
 
   <source>TSPLIB</source>
 
-  <description>Asymmetric TSP (Fischetti)</description>
+  <description>124-Asymmetric TSP (Fischetti)</description>
 
   <doublePrecision>15</doublePrecision>
 
