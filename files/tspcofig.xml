@@ -12,15 +12,18 @@
   <printParcial>1</printParcial>
   <tamanhoPopulacao>200</tamanhoPopulacao>
   <numGeracoes>300</numGeracoes>
-  <percentManipulacao>30</percentManipulacao>
-  <percentMutacao>20</percentMutacao>
-  <percentReducao>77</percentReducao>
-  <mutacao>0</mutacao>
+  <percentManipulacao>70</percentManipulacao>
+  <percentMutacao>1</percentMutacao>
+  <percentReducao>78</percentReducao>
+  <mutacao>3</mutacao>
   <selIndMutacao>1</selIndMutacao>
   <cruzamento>0</cruzamento>
-  <numExec>1</numExec>
+  <numExec>3</numExec>
   <roleta>0</roleta>
   <percentElitismo>70</percentElitismo>
   <ativaRecursivo>0</ativaRecursivo>
   <percentMutacaoRecursiva>0</percentMutacaoRecursiva>
+  <percentMutacaoRecursiva>30</percentMutacaoRecursiva>
+  <profundidadeMaxima>100</profundidadeMaxima>
+  <timeout>14400</timeout>
 </configuracaoTSP>
