@@ -15,9 +15,9 @@
 <percentManipulacao>30</percentManipulacao>
 <percentMutacao>20</percentMutacao>
 <percentReducao>77</percentReducao>
-<mutacao>4</mutacao>
+<mutacao>9</mutacao>
 <selIndMutacao>1</selIndMutacao>
-<cruzamento>6</cruzamento>
+<cruzamento>9</cruzamento>
 <numExec>3</numExec>
 <roleta>0</roleta>
 <percentElitismo>70</percentElitismo>
